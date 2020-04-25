@@ -27,8 +27,8 @@ class Map:
     # state int = {S_EMPTY, S_PEDESTRIAN, S_OBSTACLE, S_TARGET}
     def get_positions_of_given_state(self, state):
         positions = []
-        for x in range(0, len(self.data[0])):
-            for y in range(0, len(self.data)):
+        for x in range(0, len(self.data)):
+            for y in range(0, len(self.data[0])):
                 if self.data[x][y] == state:
                     positions.append([x, y])
         return positions
