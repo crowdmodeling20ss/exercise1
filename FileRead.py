@@ -18,7 +18,8 @@ def read_setup_file():
         setup[0] = setup[0].strip().lower()
         setup[1] = setup[1].strip()
         obj = ast.literal_eval(setup[1])
-        print(type(obj))
+
+        # Create arrays and values to setup the grid map
         if setup[0] == S_GRID_SIZE_TUPLE_NAME.lower():
             grid_size = obj
         elif setup[0] == S_PEDESTRIAN_LOCATION_ARR_NAME.lower():
@@ -36,9 +37,11 @@ def read_setup_file():
 
 
 def create_grid():
+    # Get values from file to create the grid
     grid_size, pedestrian_locations, target_locations, obstacle_locations, speed, avoidance = read_setup_file()
     grid = np.zeros(grid_size)
 
+    # Insert pedestrians, targets and obstacles to the grid.
     for loc in pedestrian_locations:
         grid[loc] = S_PEDESTRIAN
     for loc in target_locations:
