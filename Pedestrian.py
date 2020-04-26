@@ -28,7 +28,7 @@ class Pedestrian:
         neighbours = self.grid_map.get_neighbours(self.position)
 
         # TODO we can find next position Dijkstra instead of this function
-        next_position = self.get_best_next_position(neighbours)
+        next_position = self.get_best_next_position(neighbours, 1)
         next_state = self.grid_map.get_state(next_position)
 
         if not next_state == S_TARGET:
@@ -37,16 +37,23 @@ class Pedestrian:
             self.position = next_position
             print(next_position)
 
-    def get_best_next_position(self, neighbours):
+    def get_best_next_position(self, neighbours, Dijkstra_boolean = 0):
         # Distance Cost
-        distance_cost = [self.calculate_distance_cost(n) for n in neighbours]
-
-        # Interaction Cost
-        interaction_cost = [self.calculate_interaction_cost(n) for n in neighbours]
-
+        if Dijkstra_boolean == 0:
+            distance_cost = [self.calculate_distance_cost(n) for n in neighbours]
+            # Interaction Cost
+            interaction_cost = [self.calculate_interaction_cost(n) for n in neighbours]
+            return neighbours[np.argmin(distance_cost)]
+        else:
+            distance_cost = []
+            for n in neighbours:
+                distance_cost.append(self.grid_map.get_cost(n))
+                #interaction_cost = [self.calculate_interaction_cost(n) for n in neighbours]
+                print(distance_cost)
+            return neighbours[np.argmin(distance_cost)]
         # TODO: add interaction cost to distance cost
 
-        return neighbours[np.argmin(distance_cost)]
+        
 
     # TODO: this can be received from Map.cost_map
     def calculate_distance_cost(self, neighbour_position):
