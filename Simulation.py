@@ -44,8 +44,6 @@ def main():
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]]))
 
-    map_2.calculate_cost_map()
-    map_2.obstacle_cost_max()
     #print('Calculated cost Map')
     #print(map_2.cost_map)
     #plt.imshow(map_2.cost_map, cmap='Blues', interpolation='nearest')

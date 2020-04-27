@@ -40,10 +40,11 @@ class Pedestrian:
     def get_best_next_position(self, neighbours, Dijkstra_boolean = 0):
         # Distance Cost
         if Dijkstra_boolean == 0:
-            distance_cost = [self.calculate_distance_cost(n) for n in neighbours]
+            empty_neighbours = [n for n in neighbours if self.grid_map.get_state(n) == S_EMPTY]
+            distance_cost = [self.calculate_distance_cost(n) for n in empty_neighbours]
             # Interaction Cost
-            interaction_cost = [self.calculate_interaction_cost(n) for n in neighbours]
-            return neighbours[np.argmin(distance_cost)]
+            interaction_cost = [self.calculate_interaction_cost(n) for n in empty_neighbours]
+            return empty_neighbours[np.argmin(distance_cost)]
         else:
             distance_cost = []
             for n in neighbours:
