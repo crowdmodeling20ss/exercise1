@@ -3,6 +3,10 @@ S_PEDESTRIAN = 1
 S_OBSTACLE = 2
 S_TARGET = 4
 
+P_WALKING = 0
+P_WAITING = 1
+P_EXIT = 2
+
 # Default values
 S_FILENAME = "grid_setup.txt"
 S_SPEED = 0

@@ -14,7 +14,8 @@ class Pedestrian:
     :type desired_speeds: list
     """
 
-    def __init__(self, grid_map, position, desired_speeds=None):
+    def __init__(self, ca_model, grid_map, position, desired_speeds=None):
+        self.ca_model = ca_model
         self.grid_map = grid_map
         self.position = position
         self.desired_speeds = desired_speeds if desired_speeds is None else self.get_initial_speeds()
@@ -25,26 +26,41 @@ class Pedestrian:
                 np.sqrt(self.grid_map.width ** 2 + self.grid_map.height ** 2)]
 
     def tick(self):
-        neighbours = self.grid_map.get_neighbours(self.position)
-
-        # TODO we can find next position Dijkstra instead of this function
-        next_position = self.get_best_next_position(neighbours, 1)
+        next_position = self.get_best_next_position(1)
         next_state = self.grid_map.get_state(next_position)
 
-        if not next_state == S_TARGET:
-            self.grid_map.set_state(next_position, S_PEDESTRIAN)
-            self.grid_map.set_state(self.position, S_EMPTY)
-            self.position = next_position
+        if next_state == S_TARGET:
+            self.exit()
+        else:
+            self.forward(next_position)
             print(next_position)
 
-    def get_best_next_position(self, neighbours, Dijkstra_boolean = 0):
+    def forward(self, next_position):
+        self.grid_map.set_state(next_position, S_PEDESTRIAN)
+        self.grid_map.set_state(self.position, S_EMPTY)
+        self.position = next_position
+
+    def exit(self):
+        self.grid_map.set_state(self.position, S_EMPTY)
+        self.ca_model.remove_pedestrian(self)
+
+    def get_best_next_position(self, Dijkstra_boolean = 0):
+        neighbours = self.grid_map.get_neighbours(self.position)
+
         # Distance Cost
         if Dijkstra_boolean == 0:
-            empty_neighbours = [n for n in neighbours if self.grid_map.get_state(n) == S_EMPTY]
+            empty_neighbours = [n for n in neighbours if [S_EMPTY, S_TARGET].count(self.grid_map.get_state(n))]
+
+            if len(empty_neighbours) == 0:
+                return self.position
+
             distance_cost = [self.calculate_distance_cost(n) for n in empty_neighbours]
             # Interaction Cost
             interaction_cost = [self.calculate_interaction_cost(n) for n in empty_neighbours]
-            return empty_neighbours[np.argmin(distance_cost)]
+            print("distance_cost:"+str(distance_cost))
+            ss = np.argmin(distance_cost)
+            print("ss:"+str(ss) + " aa:"+str(empty_neighbours))
+            return empty_neighbours[ss]
         else:
             distance_cost = []
             for n in neighbours:
@@ -54,7 +70,6 @@ class Pedestrian:
             return neighbours[np.argmin(distance_cost)]
         # TODO: add interaction cost to distance cost
 
-        
 
     # TODO: this can be received from Map.cost_map
     def calculate_distance_cost(self, neighbour_position):

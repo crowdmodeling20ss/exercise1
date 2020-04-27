@@ -30,4 +30,7 @@ class CellularModel:
     # make private
     def import_pedestrians_from_map(self):
         for pos in self.grid_map.get_positions_of_given_state(S_PEDESTRIAN):
-            self.pedestrians.append(Pedestrian(self.grid_map, pos))
+            self.pedestrians.append(Pedestrian(self, self.grid_map, pos))
+
+    def remove_pedestrian(self, pedestrian):
+        self.pedestrians.remove(pedestrian)
