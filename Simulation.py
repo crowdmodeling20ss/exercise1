@@ -104,7 +104,7 @@ def main():
         #print(elapsed)
         plt.cla()
         plt.imshow(cm.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
-        plt.pause(1)
+        plt.pause(0.4)
 
 
 if __name__ == '__main__':
