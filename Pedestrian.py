@@ -14,7 +14,8 @@ class Pedestrian:
     :type desired_speeds: list
     """
 
-    def __init__(self, ca_model, grid_map, position, desired_speeds=None):
+    def __init__(self, i, ca_model, grid_map, position, desired_speeds=None):
+        self.i = i
         self.ca_model = ca_model
         self.grid_map = grid_map
         self.position = position
@@ -26,7 +27,7 @@ class Pedestrian:
                 np.sqrt(self.grid_map.width ** 2 + self.grid_map.height ** 2)]
 
     def tick(self):
-        next_position = self.get_best_next_position(0)
+        next_position = self.get_best_next_position(1)
         next_state = self.grid_map.get_state(next_position)
 
         if next_state == S_TARGET:
@@ -36,7 +37,7 @@ class Pedestrian:
             print(next_position)
 
     def forward(self, next_position):
-        self.grid_map.set_state(next_position, S_PEDESTRIAN)
+        self.grid_map.set_state(next_position, self.i)
         self.grid_map.set_state(self.position, S_EMPTY)
         self.position = next_position
 

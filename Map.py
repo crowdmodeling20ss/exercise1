@@ -30,7 +30,7 @@ class Map:
         positions = []
         for x in range(0, len(self.data)):
             for y in range(0, len(self.data[0])):
-                if self.data[x][y] == state:
+                if (state == S_PEDESTRIAN and self.data[x][y] >= state) or (state != S_PEDESTRIAN and self.data[x][y] == state):
                     positions.append([x, y])
         return positions
 

@@ -33,6 +33,7 @@ class Dijkstra:
                     self.__set_cost(current_position, new_cost)
                 self.__add_neighbour_to_queue(position_tuple[0], position_tuple[1])
 
+        print(str(self.__cost_map))
         return self.__cost_map
 
     def __create_empty_map(self):
