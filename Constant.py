@@ -8,17 +8,13 @@ P_WAITING = 1
 P_EXIT = 2
 
 # Default values
-S_FILENAME = "grid_setup.txt"
+S_FILENAME = "scenario.txt"
 S_SPEED = 0
 S_AVOIDANCE = 0
-
-# Array and tuple name formats in grid_setup.txt
-S_GRID_SIZE_TUPLE_NAME = "Grid Size"
-S_PEDESTRIAN_LOCATION_ARR_NAME = "Pedestrian"
-S_TARGET_LOCATION_ARR_NAME = "Target"
-S_OBSTACLE_LOCATION_ARR_NAME = "Obstacle"
-S_SPEED_INT_NAME = "Speed"
-S_AVOIDANCE_INT_NAME = "Avoidance"
+PEDESTRIAN_SIZE = 40  # Cm
+SCENARIO_4_LINE_MOVEMENT_PEDESTRIANS = 20  # Number of pedestrians for line movement in Scenario 4
+SCENARIO_7_WIDTH = 20  # M
+SCENARIO_7_LENGTH = 200  # M
 
 # TODO: We can increase number of direction later
 DIRECTIONS = [[-1, 0],  # North
