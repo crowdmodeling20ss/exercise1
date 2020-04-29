@@ -15,6 +15,7 @@ class GridCreator:
         self.columns = np.size(self.data, 1)
         self.scale_var = scale_var
         self.grid = self.createEmptyGrid()
+        self.corners = []
 
         self.emptyGridfiller()
 
@@ -44,6 +45,12 @@ class GridCreator:
         for r in range(self.scale_var):
             for c in range(self.scale_var):
                 self.grid[row+r][column+c] = value
+        if value == S_PEDESTRIAN:
+            self.pedestrianListAdder(row,column)
+    
+    def pedestrianListAdder(self, row, col):
+        self.corners.append([(row, col),(row, col + (self.scale_var - 1)),(row + (self.scale_var - 1), col),(row + (self.scale_var - 1), col + (self.scale_var - 1))])
+        
 
     def targetCreator(self, row, column):
         ##now we have a cell here which is self.data[row][column]
