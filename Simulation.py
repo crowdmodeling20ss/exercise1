@@ -79,7 +79,7 @@ def main():
     # Runs the scenario in scenario.txt
     grid = create_grid()
     map_obj = Map(grid.shape[0], grid.shape[1], grid)
-    cm = CellularModel(map_obj)
+    cm = CellularModel(RIMEA_SCENARIO_6)
     #
 
 
@@ -102,6 +102,10 @@ def main():
     plt.yticks(visible=True)
     plt.imshow(cm.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
     ax.set_aspect('equal')
+    plt.pause(1)
+
+    plt.cla()
+    plt.imshow(cm.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
     plt.pause(5)
 
     for i in range(0, 75):###Understand when you arrive to the target.
@@ -112,7 +116,7 @@ def main():
         #print(elapsed)
         plt.cla()
         plt.imshow(cm.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
-        plt.pause(2)
+        plt.pause(0.5)
 
 
 if __name__ == '__main__':

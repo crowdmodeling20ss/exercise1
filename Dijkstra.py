@@ -33,7 +33,10 @@ class Dijkstra:
                     self.__set_cost(current_position, new_cost)
                 self.__add_neighbour_to_queue(position_tuple[0], position_tuple[1])
 
-        return self.__cost_map
+        return self.scale_cost(self.__cost_map)
+
+    def scale_cost(self, cost_map):
+        return cost_map / np.nanmax(cost_map[cost_map != np.inf])
 
     def __create_empty_map(self):
         return np.zeros((np.size(self.data, 0), np.size(self.data, 1)))
