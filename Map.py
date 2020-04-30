@@ -1,6 +1,7 @@
 from Constant import *
 from Dijkstra import Dijkstra
 import math
+import concurrent.futures
 
 
 class Map:
@@ -50,86 +51,125 @@ class Map:
 
         return available_neighbours
 
+    def neighbour_check_top(self, corners, size):
+        direction_cost = 0
+        if 0 <= (corners[0][0] -1) <= len(self.data):
+            print(size)
+            for i in range(size):
+                curr_point = self.data[corners[0][0]-1][corners[0][1]+i]
+                if curr_point == S_TARGET:
+                    direction_cost = -1
+                    return direction_cost
+                    ##EXIT FUNCTION, found the target
+                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    direction_cost = -2#invalid neighbour
+                    return direction_cost
+                    #Check if break works:
+                else:
+                    direction_cost += self.cost_map[corners[0][0]-1][corners[0][1]+i]
+            return direction_cost
+        else:
+            direction_cost = -2 #invalid neighbour
+            return direction_cost
+
+    def neighbour_check_right(self, corners, size):
+        direction_cost = 0
+        if 0 <= (corners[1][1] + 1) <= len(self.data):
+            for i in range(size):
+                curr_point = self.data[corners[1][0] + i][corners[1][1]+1]
+                if curr_point == S_TARGET:
+                    direction_cost = -1
+                    return direction_cost
+                    ##EXIT FUNCTION, found the target
+                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    direction_cost = -2#invalid neighbour
+                    return direction_cost
+                    
+                else:
+                    direction_cost += self.cost_map[corners[1][0]+i][corners[1][1]+1]
+            return direction_cost
+        else:
+            direction_cost = -2 #invalid neighbour
+            return direction_cost
+    
+    def neighbour_check_bottom(self, corners, size):
+        direction_cost = 0
+        if 0 <= (corners[2][0] +1) <= len(self.data):
+            for i in range(size):
+                curr_point = self.data[corners[2][0]+1][corners[2][1]+i]
+                if curr_point == S_TARGET:
+                    direction_cost = -1
+                    return direction_cost
+                    ##EXIT FUNCTION, found the target
+                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    direction_cost = -2#invalid neighbour
+                    #Check if break works:
+                    return direction_cost
+                else:
+                    direction_cost += self.cost_map[corners[2][0]+1][corners[2][1]+i]
+            return direction_cost
+        else:
+            direction_cost = -2 #invalid neighbour
+            return direction_cost
+
+    def neighbour_check_left(self, corners, size):
+        direction_cost = 0
+        if 0 <= (corners[0][1] -1) <= len(self.data):
+            for i in range(size):
+                curr_point = self.data[corners[0][0]+i][corners[0][1]-1]
+                if curr_point == S_TARGET:
+                    direction_cost = -1
+                    return direction_cost
+                    ##EXIT FUNCTION, found the target
+                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    direction_cost = -2#invalid neighbour
+                    #Check if break works:
+                    return direction_cost
+                else:
+                    direction_cost += self.cost_map[corners[0][0]+i][corners[0][1]-1]
+            return direction_cost
+        else:
+            direction_cost = -2 #invalid neighbour
+            return direction_cost
+
+    def thread_function(self, corners, size, direction):
+        if direction == 0:
+            return self.neighbour_check_top(corners, size)
+        elif direction == 1:
+            return self.neighbour_check_right(corners, size)
+        elif  direction == 2:
+            return self.neighbour_check_bottom(corners, size)
+        elif direction == 3:
+            return self.neighbour_check_left(corners, size)
+
 
     ##TODO: MULTICELL GET NEIGHBOR WITH COST
     def get_neighbours_multicell(self, corners, size):
 
         direction_cost = [0,0,0,0] #costs for top, right, bottom, left direction
 
-        #print("neighbours multicell size", size)
-        #for top side, calculate from top-left-corner
-        if 0 <= (corners[0][0] -1) <= len(self.data):
-            print(size)
-            for i in range(size):
-                curr_point = self.data[corners[0][0]-1][corners[0][1]+i]
-                if curr_point == S_TARGET:
-                    direction_cost[D_TOP] = -1
-                    return
-                    ##EXIT FUNCTION, found the target
-                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
-                    direction_cost[D_TOP] = -2#invalid neighbour
-                    #Check if break works:
-                    break
-                else:
-                    direction_cost[D_TOP] += self.cost_map[corners[0][0]-1][corners[0][1]+i]
-        else:
-            direction_cost[D_TOP] = -2 #invalid neighbour
-        #for right side, calculate from top-right-corner
-        if 0 <= (corners[1][1] + 1) <= len(self.data):
-            for i in range(size):
-                curr_point = self.data[corners[1][0] + i][corners[1][1]+1]
-                if curr_point == S_TARGET:
-                    direction_cost[D_RIGHT] = -1
-                    return
-                    ##EXIT FUNCTION, found the target
-                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
-                    direction_cost[D_RIGHT] = -2#invalid neighbour
-                    #Check if break works:
-                    break
-                else:
-                    direction_cost[D_RIGHT] += self.cost_map[corners[1][0]+i][corners[1][1]+1]
-        else:
-            direction_cost[D_RIGHT] = -2 #invalid neighbour
-
-        #for bottom side, calculate from bottom-left
-        if 0 <= (corners[2][0] +1) <= len(self.data):
-            for i in range(size):
-                curr_point = self.data[corners[2][0]+1][corners[2][1]+i]
-                if curr_point == S_TARGET:
-                    direction_cost[D_BOTTOM] = -1
-                    return
-                    ##EXIT FUNCTION, found the target
-                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
-                    direction_cost[D_BOTTOM] = -2#invalid neighbour
-                    #Check if break works:
-                    break
-                else:
-                    direction_cost[D_BOTTOM] += self.cost_map[corners[2][0]+1][corners[2][1]+i]
-        else:
-            direction_cost[D_BOTTOM] = -2 #invalid neighbour
-
-        #for left side, calculate from top-left
-        if 0 <= (corners[0][1] -1) <= len(self.data):
-            for i in range(size):
-                curr_point = self.data[corners[0][0]+i][corners[0][1]-1]
-                if curr_point == S_TARGET:
-                    direction_cost[D_LEFT] = -1
-                    return
-                    ##EXIT FUNCTION, found the target
-                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
-                    direction_cost[D_LEFT] = -2#invalid neighbour
-                    #Check if break works:
-                    break
-                else:
-                    direction_cost[D_LEFT] += self.cost_map[corners[0][0]+i][corners[0][1]-1]
-        else:
-            direction_cost[D_LEFT] = -2 #invalid neighbour
+        for i in range(4):
+            print("i", i)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+                #future = executor.submit(foo, 'world!')
+                future = executor.submit(self.thread_function, corners, size, i)
+                direction_cost[i] = future.result()
+        #direction_cost[D_TOP] = self.neighbour_check_top(corners, size)
+        #direction_cost[D_RIGHT] = self.neighbour_check_right(corners, size)
+        #direction_cost[D_BOTTOM] = self.neighbour_check_bottom(corners, size)
+        #direction_cost[D_LEFT] = self.neighbour_check_left(corners, size)
+        
         print("The direction costs: ", direction_cost)
         return direction_cost
         
     def set_state_multicell(self, pos, direction, size, block_type): # to change a row or column
         cell_x = pos[0]
         cell_y = pos[1]
+        #print("CELL X", cell_x)
+        #print("CELL Y", cell_y)
+        #print("Direction", direction)
+        #print("size", size)
+        #print("block type", block_type)
         if direction == D_TOP:#top
             for i in range(size):
                 self.data[cell_x][cell_y+i] = block_type
@@ -140,8 +180,8 @@ class Map:
             for i in range(size):
                 self.data[cell_x][cell_y+i] = block_type
         elif direction == D_LEFT:
-            print("size", size)
-            print("pos", pos)
+            #print("size", size)
+            #print("pos", pos)
             for i in range(size):
                 self.data[cell_x+i][cell_y] = block_type
 

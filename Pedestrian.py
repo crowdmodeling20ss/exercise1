@@ -26,7 +26,7 @@ class Pedestrian:
     def get_size(self):
         #print("Corners:", self.corners)
         #print("Get Size:", self.corners[1][1] - self.corners[0][1])
-        return abs(self.corners[0][1] - self.corners[1][1]+1) ###+1 or NOT
+        return abs(self.corners[0][1] - self.corners[1][1])+1 ###+1 or NOT
 
     def get_initial_speeds(self):
         return [min(self.grid_map.width, self.grid_map.height),

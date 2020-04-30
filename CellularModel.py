@@ -52,3 +52,10 @@ class CellularModel:
             #print(center_point)
             centers.append(center_point)
         return centers
+    
+    def end_simulation(self):
+        if len(self.pedestrians) == 0:
+            print("ALL PEDESTRIANS REACHED THE TARGET, ENDING SIMULATION")
+            return False
+        else:
+            return True

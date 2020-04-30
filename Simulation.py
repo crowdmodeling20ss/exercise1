@@ -122,7 +122,9 @@ def main():
     plt.imshow(cm.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
     plt.pause(5)
 
-    for i in range(0, 150):###Understand when you arrive to the target.
+    simulation_boolean = True
+    #for i in range(0, 150):###Understand when you arrive to the target.
+    while simulation_boolean == True:
         #start = time.time()
         cm.tick()
         #done = time.time()
@@ -131,6 +133,7 @@ def main():
         plt.cla()
         plt.imshow(cm.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
         plt.pause(0.5)
+        simulation_boolean = cm.end_simulation()
 
 
 if __name__ == '__main__':
