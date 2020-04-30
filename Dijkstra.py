@@ -22,7 +22,7 @@ class Dijkstra:
             self.__empty_visited_grid()
             self.__set_visited(t)
             self.__add_neighbour_to_queue_target(t)  # add available neighbours of target to queue
-            print('first:', self.__queue.qsize())
+            #print('first:', self.__queue.qsize())
             while self.__queue.empty() == False:
                 position_tuple = self.__queue.get()  # get the first element in queue. The element is [[first position], [parent position]]
                 new_cost = self.__get_cost(position_tuple[1]) + 1  # parents cost + 1

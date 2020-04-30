@@ -50,8 +50,8 @@ class Pedestrian:
         neighbours = self.grid_map.get_neighbours(self.position)
         empty_neighbours = [n for n in neighbours if [S_EMPTY, S_TARGET].count(self.grid_map.get_state(n))]
         if len(empty_neighbours) == 0:
-            print("self.position:" + str(self.position) + str(neighbours) + str(empty_neighbours))
-            print("MAP")
+            #print("self.position:" + str(self.position) + str(neighbours) + str(empty_neighbours))
+            #print("MAP")
             print(str(self.grid_map.data))
             return self.position
 

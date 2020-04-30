@@ -12,7 +12,7 @@ S_FILENAME = "scenario.txt"
 S_SPEED = 0
 S_AVOIDANCE = 0
 PEDESTRIAN_SIZE = 40  # Cm
-SCENARIO_4_LINE_MOVEMENT_PEDESTRIANS = 20  # Number of pedestrians for line movement in Scenario 4
+PEDESTRIAN_SIZE_SCENARIO_4 = 20  # With 40 cm, 6 pedestrians cannot fit in 1 sqm area
 SCENARIO_7_WIDTH = 20  # M
 SCENARIO_7_LENGTH = 200  # M
 

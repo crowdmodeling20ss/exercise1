@@ -19,9 +19,10 @@ def scenario_1():
 
 def scenario_4(line_movement):
     # Corridor with 1000m long, 10m wide
+    density = 1  # TODO: Read from the scenario.txt file or from Constant.py
     line_movement = line_movement.lower()
-    width = int(1000 / PEDESTRIAN_SIZE)
-    length = int(100000 / PEDESTRIAN_SIZE)
+    width = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)
+    length = int(100000 / PEDESTRIAN_SIZE_SCENARIO_4)
     obstacle_locations = []
     target_locations = []
     pedestrian_locations = []
@@ -32,14 +33,53 @@ def scenario_4(line_movement):
     grid_size = (width, length)
 
     if line_movement == "true":
-        for i in range(0,SCENARIO_4_LINE_MOVEMENT_PEDESTRIANS):
-            pedestrian_locations.append((0, i))
+        block_size = int(500 / PEDESTRIAN_SIZE_SCENARIO_4)  # 20cm x 500cm = 1sqm, so block size is 25
+        if density >= 1:
+            for j in range(0, length, block_size):
+                loc_y = np.random.choice(list(range(j, j + block_size)), density, replace=False)
+                for k in range(density):
+                    pedestrian_locations.append((0, loc_y[k]))
+        else:
+            for j in range(0, length, block_size * 2):
+                loc_y = np.random.choice(list(range(j, j + (block_size * 2))), 1, replace=False)
+                pedestrian_locations.append((0, loc_y[0]))
     else:
-        # TODO: pedestrians with different densities
-        pedestrian_locations = [(2, 0)]  # Just an example
+        block_size = int(100 / PEDESTRIAN_SIZE_SCENARIO_4) # We need 100/20=5 block to represent 1 meter to calculate 1 sqm.
+        # Placing pedestrians to 1 sqm block according to density
+        if density >= 1:
+            for i in range(0, width, block_size):
+                for j in range(0, length, block_size):
+                    loc_x = np.random.randint(low=i, high=i + block_size, size=density)
+                    loc_y = np.random.randint(low=j, high=j + block_size, size=density)
+                    for k in range(density):
+                        loc = (loc_x[k], loc_y[k])
+                        status = True
+                        while status:
+                            if loc in pedestrian_locations:
+                                loc_x_new = np.random.randint(low=i, high=i + block_size)
+                                loc_y_new = np.random.randint(low=j, high=j + block_size)
+                                loc = (loc_x_new, loc_y_new)
+                            else:
+                                status = False
+                        pedestrian_locations.append(loc)
+        else:  # Density = 0.5, we are now putting one pedestrian to every 2 sqm.
+            for i in range(0, width, block_size):
+                for j in range(0, length, block_size * 2):
+                    loc_x = np.random.randint(low=i, high=i + block_size)
+                    loc_y = np.random.randint(low=j, high=j + (block_size * 2))
+                    loc = (loc_x, loc_y)
+                    status = True
+                    while status:
+                        if loc in pedestrian_locations:
+                            loc_x_new = np.random.randint(low=i, high=i + block_size)
+                            loc_y_new = np.random.randint(low=j, high=j + (block_size * 2))
+                            loc = (loc_x_new, loc_y_new)
+                        else:
+                            status = False
+                    pedestrian_locations.append(loc)
 
-        for i in range(0, width):
-            target_locations.append((i, length - 1))
+    for i in range(0, width):
+        target_locations.append((i, length - 1))
 
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
@@ -48,7 +88,7 @@ def scenario_6():
     side = int(1200 / PEDESTRIAN_SIZE)
     small_length = int(1000 / PEDESTRIAN_SIZE)
     grid_size = (side, side)
-
+    dist_boundry = int(600)
     # TODO: pedestrians with 6m uniformly distributed
     pedestrian_locations = [(side - 3, 0)]
 
@@ -112,4 +152,3 @@ def create_grid():
         grid[loc] = S_OBSTACLE
 
     return grid
-
