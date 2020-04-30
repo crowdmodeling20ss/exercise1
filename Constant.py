@@ -8,7 +8,7 @@ P_WAITING = 1
 P_EXIT = 2
 
 # Default values
-S_FILENAME = "scenario.txt"
+S_FILENAME = "exercise1/scenario.txt"
 S_SPEED = 0
 S_AVOIDANCE = 0
 PEDESTRIAN_SIZE = 40  # Cm
@@ -18,11 +18,16 @@ SCENARIO_7_LENGTH = 200  # M
 
 # TODO: We can increase number of direction later
 DIRECTIONS = [[-1, 0],  # North
-              [0, -1],  # East
-              [0, 1],  # West
+              [0, -1],  # West
+              [0, 1],  # East
               [1, 0],  # South
               [-1, -1],  # North-East
               [-1, 1],  # North-West
               [1, -1],  # South-East
               [1, 1],  # South-West
               ]
+
+D_TOP = 0
+D_RIGHT = 1
+D_BOTTOM = 2
+D_LEFT = 3

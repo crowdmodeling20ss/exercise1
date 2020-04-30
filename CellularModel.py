@@ -17,6 +17,9 @@ class CellularModel:
     def __init__(self, grid_map):
         self.pedestrians = []
         self.grid_map = grid_map
+        #self.corners = grid_map.corners
+        #print(self.corners)
+
 
         self.import_pedestrians_from_map()
 
@@ -25,12 +28,27 @@ class CellularModel:
     # if we want to change time, we can change number of iteration. i.e. 1 iteration is 10 second
     def tick(self):
         for p in self.pedestrians:
-            p.tick()
+            #p.tick()
+            p.tick_multicell()
 
     # make private
     def import_pedestrians_from_map(self):
-        for p_id, pos in enumerate(self.grid_map.get_positions_of_given_state(S_PEDESTRIAN), start=S_PEDESTRIAN):
-            self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, pos))
+        centers = self.calculate_center()
+        #print(centers)
+        print("CORNERS:", self.grid_map.corners)
+        for p_id, pos in enumerate(centers):
+            #print("THIS IS POS", pos)
+            #self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, pos, 0, ))
+            print("Corners of this pedestrian:", self.grid_map.corners[p_id])
+            self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, pos, 0, self.grid_map.corners[p_id]))
 
     def remove_pedestrian(self, pedestrian):
         self.pedestrians.remove(pedestrian)
+
+    def calculate_center(self):
+        centers = []
+        for arr in self.grid_map.corners:
+            center_point = [(arr[0][0] + arr[3][0])/2, (arr[0][1] + arr[3][1])/2]
+            #print(center_point)
+            centers.append(center_point)
+        return centers

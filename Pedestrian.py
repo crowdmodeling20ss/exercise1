@@ -18,9 +18,15 @@ class Pedestrian:
         self.ca_model = ca_model
         self.grid_map = grid_map
         self.position = position
-        self.corners = [position, position, position, position]
+        self.corners = corners #left-top, right-top, left-bottom, right-bottom
         self.desired_speeds = desired_speeds if desired_speeds is None else self.get_initial_speeds()
         self.visited_path = [position]
+        self.size = self.get_size()#This is to understand how many blocks does the ped. has in ints width/height
+
+    def get_size(self):
+        print("Corners:", self.corners)
+        print("Get Size:", self.corners[1][1] - self.corners[0][1])
+        return (self.corners[0][1] - self.corners[1][1])
 
     def get_initial_speeds(self):
         return [min(self.grid_map.width, self.grid_map.height),
@@ -36,6 +42,11 @@ class Pedestrian:
             self.forward(next_position)
             print(next_position)
 
+    def tick_multicell(self):
+        self.get_best_next_position_Multicell()
+        print
+
+
     def forward(self, next_position):
         self.grid_map.set_state(next_position, S_PEDESTRIAN)
         self.grid_map.set_state(self.position, S_EMPTY)
@@ -46,6 +57,55 @@ class Pedestrian:
         self.grid_map.set_state(self.position, S_EMPTY)
         self.ca_model.remove_pedestrian(self)
 
+
+    ###TODO: Make this function make multi-cell decision
+    def get_best_next_position_Multicell(self):
+        neighbour_costs = self.grid_map.get_neighbours_multicell(self.corners, self.size)
+        ## we will get a vector with costs of [top, right, bottom. left]
+        ##The cost of -1 means that the neighbor of that side has a target
+        ##The cost of -2 means that the neighbor of that side has a obstacle or ped. so we cant move there.
+        
+        ##The interaction cost is not added yet.
+        if self.pedestrian_end_check(neighbour_costs) == True:
+            self.exit_multicell()
+        else:
+            best = -1
+            cost = math.inf
+            for i in range(4):#check all sides
+                if neighbour_costs[i] != -2 and cost > neighbour_costs[i]:
+                    cost = neighbour_costs[i]
+                    best = i
+            if best != -1: #There is a possible way
+                self.forward_multicell(best)
+                print("Best direction is:", best)
+            
+    def exit_multicell(self):
+        self.grid_map.set_state_block(self.corners, self.size, S_EMPTY)
+        self.ca_model.remove_pedestrian(self)
+
+    def pedestrian_end_check(self, n_costs):
+        for i in n_costs:
+            if i == -1:
+                ###end the pedestrian
+                return True
+        return False
+
+    def forward_multicell(self, direction):##move size many blocks into the direction.
+        if direction == D_TOP:
+            self.grid_map.set_state_multicell(self.corners[2], D_BOTTOM,self.size, S_EMPTY ) #Empty the existing cells that move
+            self.grid_map.set_state_multicell([self.corners[0][0]-1, self.corners[0][1]],D_TOP, self.size, S_PEDESTRIAN)
+        elif direction == D_RIGHT:
+            self.grid_map.set_state_multicell(self.corners[0], D_LEFT,self.size, S_EMPTY ) #Empty the existing cells that move
+            self.grid_map.set_state_multicell([self.corners[1][0],self.corners[1][1]+1],D_RIGHT, self.size, S_PEDESTRIAN)
+        elif direction == D_BOTTOM:
+            self.grid_map.set_state_multicell(self.corners[0], D_TOP,self.size, S_EMPTY ) #Empty the existing cells that move
+            self.grid_map.set_state_multicell([self.corners[2][0]+1, self.corners[2][1]],D_BOTTOM, self.size, S_PEDESTRIAN)
+        elif direction == D_LEFT:
+            self.grid_map.set_state_multicell(self.corners[1], D_RIGHT,self.size, S_EMPTY ) #Empty the existing cells that move
+            self.grid_map.set_state_multicell([self.corners[0][0], self.corners[0][1]-1],D_LEFT, self.size, S_PEDESTRIAN)
+        
+    
+    
     def get_best_next_position(self, Dijkstra_boolean=0):
         neighbours = self.grid_map.get_neighbours(self.position)
         empty_neighbours = [n for n in neighbours if [S_EMPTY, S_TARGET].count(self.grid_map.get_state(n))]

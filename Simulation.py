@@ -7,10 +7,12 @@ import matplotlib.pyplot as plt
 from Map import Map
 from CellularModel import CellularModel
 from ScenarioGrids import *
+from GridCreator import *
+
 
 def main():
 
-    map_1 = Map(25, 25, np.array([
+    """map_1 = Map(25, 25, np.array([
         [0, 0, 0, 0, 0],
         [0, 1, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -75,11 +77,23 @@ def main():
         [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]))
-
+    """
     # Runs the scenario in scenario.txt
     grid = create_grid()
-    map_obj = Map(grid.shape[0], grid.shape[1], grid)
-    cm = CellularModel(RIMEA_SCENARIO_6)
+
+    the_grid = GridCreator(grid,4)
+    #print(the_grid.grid.shape[0])
+    #print(the_grid.grid.shape[1])
+    
+
+
+    map_obj = Map(the_grid.grid.shape[0], the_grid.grid.shape[1], the_grid.grid, the_grid.corners)
+
+    print(the_grid.corners)
+    print("GOING INTO CM")
+
+
+    cm = CellularModel(map_obj)
     #
 
 
@@ -94,8 +108,8 @@ def main():
 
 
 
-    plt.imshow(cm.grid_map.data, origin='upper', interpolation='none')
-    plt.show()
+    #plt.imshow(cm.grid_map.data, origin='upper', interpolation='none')
+    #plt.show()
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(111)
     plt.xticks(visible=True)

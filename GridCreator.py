@@ -28,6 +28,7 @@ class GridCreator:
         #create an empty grid scaled with the scale_var
         for row in range(self.rows):
             for column in range(self.columns):
+                print(column)
                 if self.data[row][column] == S_EMPTY:
                     continue
                 else:
@@ -52,14 +53,14 @@ class GridCreator:
         self.corners.append([(row, col),(row, col + (self.scale_var - 1)),(row + (self.scale_var - 1), col),(row + (self.scale_var - 1), col + (self.scale_var - 1))])
         
 
-    def targetCreator(self, row, column):
+    def targetCreator(self, scaled_row, scaled_column):
         ##now we have a cell here which is self.data[row][column]
         #boundaries of the new multi block is:
         #(row*scale, column*scale)     (row*scale, column*scale + scale-1)
         #(row*scale + scale-1, column*scale ) (row*scale + scale-1, column*scale + scale-1)
         #from left-top to right top
-        scaled_row = row * self.scale_var
-        scaled_column = column * self.scale_var
+        #scaled_row = row * self.scale_var
+        #scaled_column = column * self.scale_var
         for i in range(self.scale_var):
             self.grid[scaled_row][scaled_column + i] = S_TARGET
             self.grid[scaled_row + i][scaled_column] = S_TARGET
