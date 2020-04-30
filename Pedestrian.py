@@ -24,9 +24,9 @@ class Pedestrian:
         self.size = self.get_size()#This is to understand how many blocks does the ped. has in ints width/height
 
     def get_size(self):
-        print("Corners:", self.corners)
-        print("Get Size:", self.corners[1][1] - self.corners[0][1])
-        return (self.corners[0][1] - self.corners[1][1])
+        #print("Corners:", self.corners)
+        #print("Get Size:", self.corners[1][1] - self.corners[0][1])
+        return abs(self.corners[0][1] - self.corners[1][1]+1) ###+1 or NOT
 
     def get_initial_speeds(self):
         return [min(self.grid_map.width, self.grid_map.height),
@@ -44,7 +44,8 @@ class Pedestrian:
 
     def tick_multicell(self):
         self.get_best_next_position_Multicell()
-        print
+        print("corners:", self.corners)
+        
 
 
     def forward(self, next_position):
@@ -60,6 +61,8 @@ class Pedestrian:
 
     ###TODO: Make this function make multi-cell decision
     def get_best_next_position_Multicell(self):
+        #print("get best next position size", self.size)
+
         neighbour_costs = self.grid_map.get_neighbours_multicell(self.corners, self.size)
         ## we will get a vector with costs of [top, right, bottom. left]
         ##The cost of -1 means that the neighbor of that side has a target
@@ -91,19 +94,29 @@ class Pedestrian:
         return False
 
     def forward_multicell(self, direction):##move size many blocks into the direction.
-        if direction == D_TOP:
+
+        #####UPDATE CORNERS: 
+        if direction == D_TOP:# row -1
             self.grid_map.set_state_multicell(self.corners[2], D_BOTTOM,self.size, S_EMPTY ) #Empty the existing cells that move
             self.grid_map.set_state_multicell([self.corners[0][0]-1, self.corners[0][1]],D_TOP, self.size, S_PEDESTRIAN)
-        elif direction == D_RIGHT:
+            for i in range(4):
+                self.corners[i] = [self.corners[i][0] -1, self.corners[i][1]]
+        elif direction == D_RIGHT: # column +1
             self.grid_map.set_state_multicell(self.corners[0], D_LEFT,self.size, S_EMPTY ) #Empty the existing cells that move
             self.grid_map.set_state_multicell([self.corners[1][0],self.corners[1][1]+1],D_RIGHT, self.size, S_PEDESTRIAN)
-        elif direction == D_BOTTOM:
+            for i in range(4):
+                #print("error", self.corners[i][1])
+                self.corners[i] = [self.corners[i][0], self.corners[i][1] +1]
+        elif direction == D_BOTTOM:#row +1
             self.grid_map.set_state_multicell(self.corners[0], D_TOP,self.size, S_EMPTY ) #Empty the existing cells that move
             self.grid_map.set_state_multicell([self.corners[2][0]+1, self.corners[2][1]],D_BOTTOM, self.size, S_PEDESTRIAN)
-        elif direction == D_LEFT:
+            for i in range(4):
+                self.corners[i] = [self.corners[i][0] +1, self.corners[i][1]]
+        elif direction == D_LEFT: # column -1
             self.grid_map.set_state_multicell(self.corners[1], D_RIGHT,self.size, S_EMPTY ) #Empty the existing cells that move
             self.grid_map.set_state_multicell([self.corners[0][0], self.corners[0][1]-1],D_LEFT, self.size, S_PEDESTRIAN)
-        
+            for i in range(4):
+                self.corners[i] = [self.corners[i][0], self.corners[i][1] -1]
     
     
     def get_best_next_position(self, Dijkstra_boolean=0):

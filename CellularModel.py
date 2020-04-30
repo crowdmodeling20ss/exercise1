@@ -39,7 +39,7 @@ class CellularModel:
         for p_id, pos in enumerate(centers):
             #print("THIS IS POS", pos)
             #self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, pos, 0, ))
-            print("Corners of this pedestrian:", self.grid_map.corners[p_id])
+            #print("Corners of this pedestrian:", self.grid_map.corners[p_id])
             self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, pos, 0, self.grid_map.corners[p_id]))
 
     def remove_pedestrian(self, pedestrian):

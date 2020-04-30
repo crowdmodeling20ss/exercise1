@@ -122,7 +122,7 @@ def main():
     plt.imshow(cm.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
     plt.pause(5)
 
-    for i in range(0, 75):###Understand when you arrive to the target.
+    for i in range(0, 150):###Understand when you arrive to the target.
         #start = time.time()
         cm.tick()
         #done = time.time()

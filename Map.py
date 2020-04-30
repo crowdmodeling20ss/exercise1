@@ -56,7 +56,7 @@ class Map:
 
         direction_cost = [0,0,0,0] #costs for top, right, bottom, left direction
 
-        
+        #print("neighbours multicell size", size)
         #for top side, calculate from top-left-corner
         if 0 <= (corners[0][0] -1) <= len(self.data):
             print(size)
@@ -124,7 +124,7 @@ class Map:
                     direction_cost[D_LEFT] += self.cost_map[corners[0][0]+i][corners[0][1]-1]
         else:
             direction_cost[D_LEFT] = -2 #invalid neighbour
-        
+        print("The direction costs: ", direction_cost)
         return direction_cost
         
     def set_state_multicell(self, pos, direction, size, block_type): # to change a row or column
@@ -140,6 +140,8 @@ class Map:
             for i in range(size):
                 self.data[cell_x][cell_y+i] = block_type
         elif direction == D_LEFT:
+            print("size", size)
+            print("pos", pos)
             for i in range(size):
                 self.data[cell_x+i][cell_y] = block_type
 
