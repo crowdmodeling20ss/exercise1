@@ -34,7 +34,7 @@ class Pedestrian:
             self.exit()
         else:
             self.forward(next_position)
-            print(next_position)
+            #print(next_position)
 
     def forward(self, next_position):
         self.grid_map.set_state(next_position, S_PEDESTRIAN)
@@ -52,7 +52,7 @@ class Pedestrian:
         if len(empty_neighbours) == 0:
             #print("self.position:" + str(self.position) + str(neighbours) + str(empty_neighbours))
             #print("MAP")
-            print(str(self.grid_map.data))
+           # print(str(self.grid_map.data))
             return self.position
 
         # Distance Cost
@@ -62,7 +62,7 @@ class Pedestrian:
             distance_cost = []
             for n in empty_neighbours:
                 distance_cost.append(self.grid_map.get_cost(n))
-                print(distance_cost)
+                #print(distance_cost)
 
         # TODO: add interaction cost to distance cost
         # Interaction Cost
