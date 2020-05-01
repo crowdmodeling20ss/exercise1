@@ -73,7 +73,7 @@ class Map:
 
     def neighbour_check_right(self, corners, size):
         direction_cost = 0
-        if 0 <= (corners[1][1] + 1) < len(self.data):
+        if 0 <= (corners[1][1] + 1) < len(self.data[0]):
             for i in range(size):
                 curr_point = self.data[corners[1][0] + i][corners[1][1]+1]
                 if curr_point == S_TARGET:
@@ -113,7 +113,7 @@ class Map:
 
     def neighbour_check_left(self, corners, size):
         direction_cost = 0
-        if 0 <= (corners[0][1] -1) < len(self.data):
+        if 0 <= (corners[0][1] -1) < len(self.data[0]):
             for i in range(size):
                 curr_point = self.data[corners[0][0]+i][corners[0][1]-1]
                 if curr_point == S_TARGET:
