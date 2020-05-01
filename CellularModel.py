@@ -31,6 +31,7 @@ class CellularModel:
     # make private
     def import_pedestrians_from_map(self):
         print("CORNERS:", self.grid_map.corners)
+        velocities = [[4, 18], [6, 18], [16, 18]]
         for p_id, corners in enumerate(self.grid_map.corners):
             #print("THIS IS POS", pos)
             #self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, pos, 0, ))
@@ -39,7 +40,7 @@ class CellularModel:
             r_max = self.get_size() * 2
             print("R_max:", r_max)
             center = Util.calculate_center(corners)
-            self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, center, 0, self.grid_map.corners[p_id], r_max))
+            self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, center, velocities[p_id], self.grid_map.corners[p_id], r_max))
 
     def get_size(self):
         #print("Corners:", self.corners)
