@@ -167,7 +167,7 @@ def main():
 
     runSimulation(rimea_1_cullular_model)
 
-def runSimulation(ca_model, velocity_graph_enabled=True):
+def runSimulation(ca_model, velocity_graph_enabled=False):
     simulation_boolean = True
     time_tick = []
     path_pedestrians = [[] for _ in range(len(ca_model.pedestrians))]
