@@ -6,7 +6,8 @@ import math
 import matplotlib.pyplot as plt
 from Map import Map
 from CellularModel import CellularModel
-from ScenarioGrids import *
+from ScenarioGrids import create_grid
+from NewScenarios import *
 
 def main():
     '''
@@ -79,6 +80,8 @@ def main():
 
     # Runs the scenario in scenario.txt
     grid = create_grid()
+    #grid = create_grid_new_scenario()
+
     map_obj = Map(grid.shape[0], grid.shape[1], grid)
     cm = CellularModel(map_obj)
     #
@@ -95,17 +98,17 @@ def main():
 
 
 
-    fig = plt.figure(figsize=(12, 12))
+    fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(111)
     plt.xticks(visible=True)
     plt.yticks(visible=True)
     plt.imshow(cm.grid_map.data, origin='upper', interpolation='nearest', clim=(0, 8))
     ax.set_aspect('equal')
-    plt.pause(5)
+    plt.pause(1)
 
     plt.cla()
     plt.imshow(cm.grid_map.data, origin='upper', interpolation='nearest', clim=(0, 8))
-    plt.pause(5)
+    plt.pause(1)
 
     for i in range(0, 75):###Understand when you arrive to the target.
         start = time.time()

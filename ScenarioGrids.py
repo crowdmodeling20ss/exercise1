@@ -1,7 +1,9 @@
 import numpy as np
-import ast
 from Constant import *
 
+'''
+    RiMEA scenarios
+'''
 
 def scenario_1():
     # Corridor with 2m wide and 40m long
@@ -17,10 +19,8 @@ def scenario_1():
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
 
-def scenario_4(line_movement):
+def scenario_4(line_movement, density):
     # Corridor with 1000m long, 10m wide
-    density = 0.5  # TODO: Read from the scenario.txt file or from Constant.py
-    line_movement = line_movement.lower()
     width = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks 50
     length = int(100000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks, 5000
     obstacle_locations = []
@@ -30,25 +30,17 @@ def scenario_4(line_movement):
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_4 * 100) / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks, 2000 block is 400 meters, all pedestrians will be distributed before the first measuring point
 
     if line_movement == "true":
-        width = 1
-        number_of_pedestrians = int(width * 1000 * density)
-        minimum_border_length = int(number_of_pedestrians / width)  # minimum length to fit all pedestrians to the area
+        width = SCENARIO_4_LINES
 
     grid_size = (width, length)
 
     # Place pedestrians according to density, with uniform distribution
-    if line_movement == "true":  # TODO: PROBLEM WITH LINE MOVEMENT, NUMBER OF PEDESTRIANS IS BIGGER THAN THE AREA WITH DENSITY = 6, CANNOT FIT
-        loc_y = np.random.choice(list(range(0, minimum_border_length)), number_of_pedestrians, replace=False)  # minimum_border_length=6000 out of grid, our grid is 1x5000
-        for k in range(number_of_pedestrians):
-            loc = (0, loc_y[k])
-            status = True
-            while status:
-                if loc in pedestrian_locations:
-                    loc_y_new = np.random.choice(list(range(0, minimum_border_length)), 1, replace=False)
-                    loc = (0, loc_y_new[0])
-                else:
-                    status = False
-            pedestrian_locations.append(loc)
+    if line_movement:  # Here, pedestrians are placed one after the other in lines
+        border = int(number_of_pedestrians / SCENARIO_4_LINES)
+        for j in range(border):
+            for i in range(width):
+                loc = (i,j)
+                pedestrian_locations.append(loc)
     else:
         loc_x = np.random.randint(low=0, high=width, size=number_of_pedestrians)
         loc_y = np.random.randint(low=0, high=minimum_border_length, size=number_of_pedestrians)
@@ -140,25 +132,108 @@ def scenario_7():
 
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
+'''
+    Task scenarios
+'''
+def task_2():
+    grid_size = (50, 50)
+    pedestrian_locations = [(24, 4)]
+    target_locations = [(24, 24)]
+    obstacle_locations = []
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+
+def task_3():
+    grid_size = (50, 50)
+    pedestrian_locations = [(24, 4), (24, 44), (4, 24), (34, 35), (34, 13)]  # Creating pedestrians in almost circular around the target
+    target_locations = [(24, 24)]
+    obstacle_locations = []
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+
+def task_4_bottleneck():  ## It's scenario number will be 41 to read from scenario.txt
+    room_side = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)  # 50 blocks = 10m
+    corridor_length = int(500 / PEDESTRIAN_SIZE_SCENARIO_4)  # 25 blocks
+    corridor_width = int(100 / PEDESTRIAN_SIZE_SCENARIO_4)  # pedestrians are 20cm because we cannot represent 1m with 40cm blocks
+    near_corridor = int(450 / PEDESTRIAN_SIZE_SCENARIO_4)
+    grid_length = room_side + room_side + corridor_length
+    number_of_pedestrians = 150
+
+    grid_size = (room_side, grid_length + 1)  # +1 to properly implement Exit gate
+    pedestrian_locations = []
+    target_locations = []
+    obstacle_locations = []
+
+
+    # Place 150 pedestrians with uniform distribution
+    loc_x = np.random.randint(low=0, high=room_side, size=number_of_pedestrians)
+    loc_y = np.random.randint(low=0, high=corridor_length, size=number_of_pedestrians)
+    for k in range(number_of_pedestrians):
+        loc = (loc_x[k], loc_y[k])
+        status = True
+        while status:
+            if loc in pedestrian_locations:
+                loc_x_new = np.random.randint(low=0, high=room_side)
+                loc_y_new = np.random.randint(low=0, high=corridor_length)
+                loc = (loc_x_new, loc_y_new)
+            else:
+                status = False
+        pedestrian_locations.append(loc)
+
+    # Place obstacles for shape of room
+    for i in range(near_corridor):
+        loc_left_up = (i, room_side)
+        loc_left_down = (room_side - 1 - i, room_side)
+        loc_right_up = (i, room_side + corridor_length - 1)
+        loc_right_down = (room_side - 1 - i, room_side + corridor_length - 1)
+        loc_exit_up = (i, grid_length)
+        loc_exit_down = (room_side - 1 - i, grid_length)
+        obstacle_locations.append(loc_left_up)
+        obstacle_locations.append(loc_left_down)
+        obstacle_locations.append(loc_right_up)
+        obstacle_locations.append(loc_right_down)
+        obstacle_locations.append(loc_exit_up)
+        obstacle_locations.append(loc_exit_down)
+
+    for i in range(corridor_length):
+        loc_up = (near_corridor - 1, room_side + i)
+        loc_down = (near_corridor + corridor_width + 1, room_side + i)
+        obstacle_locations.append(loc_up)
+        obstacle_locations.append(loc_down)
+
+    # Place target (exit)
+    for i in range(corridor_width + 1):
+        target_locations.append((near_corridor + i, grid_length))
+
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+
 def create_grid():
-    # Get values from file to create the grid
+    # Get scenario number to create the grid
     f = open(S_FILENAME, "r")
     lines = f.readlines()
     line_movement = False
+    density = 1
+    scenario = 1
     for line in lines:
         lin = line.strip().split(" ")
-        scenario = int(lin[1].strip())
-        if scenario == 4 and len(lin) > 2:
-            line_movement = lin[-1]
+        scenario = int(lin[0].strip())
+        if scenario == 4 and len(lin) > 1:
+            density = float(lin[2])
+            if lin[1] == "1":
+                line_movement = True
 
     if scenario == 1:
         grid_size, pedestrian_locations, target_locations, obstacle_locations = scenario_1()
     elif scenario == 4:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations = scenario_4(line_movement)
+        grid_size, pedestrian_locations, target_locations, obstacle_locations = scenario_4(line_movement, density)
     elif scenario == 6:
         grid_size, pedestrian_locations, target_locations, obstacle_locations = scenario_6()
     elif scenario == 7:
         grid_size, pedestrian_locations, target_locations, obstacle_locations = scenario_7()
+    elif scenario == 2:
+        grid_size, pedestrian_locations, target_locations, obstacle_locations = task_2()
+    elif scenario == 3:
+        grid_size, pedestrian_locations, target_locations, obstacle_locations = task_3()
+    elif scenario == 41:
+        grid_size, pedestrian_locations, target_locations, obstacle_locations = task_4_bottleneck()
     else:
         return 0
 
