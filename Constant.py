@@ -21,11 +21,16 @@ MINIMUM_BORDER_LENGTH_SCENARIO_7 = 10  # M
 
 # TODO: We can increase number of direction later
 DIRECTIONS = [[-1, 0],  # North
-              [0, -1],  # East
-              [0, 1],  # West
+              [0, -1],  # West
+              [0, 1],  # East
               [1, 0],  # South
               [-1, -1],  # North-East
               [-1, 1],  # North-West
               [1, -1],  # South-East
               [1, 1],  # South-West
               ]
+
+D_TOP = 0
+D_RIGHT = 1
+D_BOTTOM = 2
+D_LEFT = 3

@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 from Map import Map
 from CellularModel import CellularModel
 from ScenarioGrids import create_grid
+from GridCreator import GridCreator
+
+from ScenarioGrids import create_grid
 from NewScenarios import *
 
 def main():
@@ -78,11 +81,23 @@ def main():
         [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]))
     '''
 
+    RIMEA_SCENARIO_1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+                                [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4]])
+    """
     # Runs the scenario in scenario.txt
-    grid = create_grid()
-    #grid = create_grid_new_scenario()
+    #grid = create_grid()
+    the_grid = GridCreator(RIMEA_SCENARIO_6, 4)
+    #print(the_grid.grid.shape[0])
+    #print(the_grid.grid.shape[1])
+    map_obj = Map(the_grid.grid.shape[0], the_grid.grid.shape[1], the_grid.grid, the_grid.corners)
 
-    map_obj = Map(grid.shape[0], grid.shape[1], grid)
+    print(the_grid.corners)
+    print("GOING INTO CM")
+
+
     cm = CellularModel(map_obj)
     #
 
@@ -95,10 +110,16 @@ def main():
     #plt.cla()
 
     #cm = CellularModel(RIMEA_SCENARIO_6)
+    """
+    grid = create_grid()
+    the_grid = GridCreator(grid, 4)
+    map_obj = Map(the_grid.grid.shape[0], the_grid.grid.shape[1], the_grid.grid, the_grid.corners)
+    cm = CellularModel(map_obj)
 
 
-
-    fig = plt.figure(figsize=(10, 10))
+    #plt.imshow(cm.grid_map.data, origin='upper', interpolation='none')
+    #plt.show()
+    fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(111)
     plt.xticks(visible=True)
     plt.yticks(visible=True)
@@ -110,15 +131,75 @@ def main():
     plt.imshow(cm.grid_map.data, origin='upper', interpolation='nearest', clim=(0, 8))
     plt.pause(1)
 
-    for i in range(0, 75):###Understand when you arrive to the target.
+    simulation_boolean = True
+    #for i in range(0, 150):###Understand when you arrive to the target.
+    while simulation_boolean == True:
         start = time.time()
         cm.tick()
+        #done = time.time()
+        #elapsed = done - start
+        #print(elapsed)
+        plt.cla()
+        plt.imshow(cm.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
+        plt.pause(0.5)
+        simulation_boolean = cm.end_simulation()
+
+    ## RIMEA_1
+    rimea_1_grid = GridCreator(RIMEA_SCENARIO_1, 4)
+    rimea_1_map = Map(rimea_1_grid.grid.shape[0], rimea_1_grid.grid.shape[1], rimea_1_grid.grid, rimea_1_grid.corners)
+    rimea_1_cullular_model = CellularModel(rimea_1_map)
+
+    #show_cost_map(rimea_1_map.cost_map, 10)
+
+    simulation_boolean = True
+    time_tick = []
+    path_pedestrians = [[] for _ in range(len(rimea_1_cullular_model.pedestrians))]
+    velocity_pedestrians = [[] for _ in range(len(rimea_1_cullular_model.pedestrians))]
+    time_counter = 0
+    while simulation_boolean == True:
+        start = time.time()
+        rimea_1_cullular_model.tick()
         done = time.time()
         elapsed = done - start
         print(elapsed)
         plt.cla()
-        plt.imshow(cm.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
-        plt.pause(0.5)
+        plt.imshow(rimea_1_cullular_model.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
+        plt.pause(0.01)
+        simulation_boolean = rimea_1_cullular_model.end_simulation()
+
+        time_counter += 1
+        for i, p in enumerate(rimea_1_cullular_model.pedestrians, start=0):
+            last_distance = 0 if len(path_pedestrians[i])==0 else path_pedestrians[i][time_counter-2]
+            last_position = np.array(p.visited_path[len(p.visited_path)-2])
+            current_position = np.array(p.visited_path[len(p.visited_path)-1]) # or p.position
+            distance = np.linalg.norm(current_position - last_position)
+            total_distance = last_distance + distance
+
+            path_pedestrians[i].append(total_distance)
+            velocity_pedestrians[i].append(distance)
+            time_tick.append(time_counter)
+
+    show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick)
+
+def show_cost_map(cost_map, duration):
+    print('Calculated cost Map')
+    print(cost_map)
+    plt.imshow(cost_map, cmap='Blues', interpolation='nearest')
+    plt.show()
+    plt.pause(duration)
+    plt.cla()
+
+def show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick):
+    plt.cla()
+    for i in range(len(path_pedestrians)):
+        plt.plot(time_tick, velocity_pedestrians[i], label="Velocity")
+        plt.plot(time_tick, path_pedestrians[i], label="Path")
+    plt.xlabel('Time')
+    plt.ylabel('Path')
+    plt.title('Path/Time Pedestrian')
+    plt.legend()
+    plt.show()
+    plt.pause(10)
 
 
 if __name__ == '__main__':

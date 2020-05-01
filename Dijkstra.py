@@ -39,6 +39,10 @@ class Dijkstra:
         return cost_map / np.nanmax(cost_map[cost_map != np.inf])
 
     def __create_empty_map(self):
+        print(self.data)
+        print(self.grid_map)
+        print(np.size(self.data,0))
+        print(np.size(self.data,1))
         return np.zeros((np.size(self.data, 0), np.size(self.data, 1)))
 
     def __set_visited(self, position):
