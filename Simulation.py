@@ -6,8 +6,8 @@ import math
 import matplotlib.pyplot as plt
 from Map import Map
 from CellularModel import CellularModel
-from ScenarioGrids import *
-from GridCreator import *
+from ScenarioGrids import create_grid
+from GridCreator import GridCreator
 
 
 def main():

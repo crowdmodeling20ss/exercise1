@@ -54,7 +54,6 @@ class Map:
     def neighbour_check_top(self, corners, size):
         direction_cost = 0
         if 0 <= (corners[0][0] -1) <= len(self.data):
-            print(size)
             for i in range(size):
                 curr_point = self.data[corners[0][0]-1][corners[0][1]+i]
                 if curr_point == S_TARGET:
@@ -149,7 +148,7 @@ class Map:
         direction_cost = [0,0,0,0] #costs for top, right, bottom, left direction
 
         for i in range(4):
-            print("i", i)
+            #print("i", i)
             with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
                 #future = executor.submit(foo, 'world!')
                 future = executor.submit(self.thread_function, corners, size, i)
@@ -159,7 +158,7 @@ class Map:
         #direction_cost[D_BOTTOM] = self.neighbour_check_bottom(corners, size)
         #direction_cost[D_LEFT] = self.neighbour_check_left(corners, size)
         
-        print("The direction costs: ", direction_cost)
+        #print("The direction costs: ", direction_cost)
         return direction_cost
         
     def set_state_multicell(self, pos, direction, size, block_type): # to change a row or column

@@ -2,10 +2,11 @@ from Map import Map
 from Constant import *
 import numpy as np
 import math
+import concurrent.futures
 
 
 class Pedestrian:
-    def __init__(self, p_id, ca_model, grid_map, position, desired_speeds=None, corners=None):
+    def __init__(self, p_id, ca_model, grid_map, position, desired_speeds=None, corners=None, centers=None, r_max = 0):
         """
         :param p_id: Pedestrian Id
         :param ca_model: CellularModel
@@ -22,6 +23,10 @@ class Pedestrian:
         self.desired_speeds = desired_speeds if desired_speeds is None else self.get_initial_speeds()
         self.visited_path = [position]
         self.size = self.get_size()#This is to understand how many blocks does the ped. has in ints width/height
+        self.centers = centers
+        self.r_max = r_max
+        #self.last_cost = math.inf
+        
 
     def get_size(self):
         #print("Corners:", self.corners)
@@ -44,7 +49,7 @@ class Pedestrian:
 
     def tick_multicell(self):
         self.get_best_next_position_Multicell()
-        print("corners:", self.corners)
+        #print("corners:", self.corners)
         
 
 
@@ -74,16 +79,33 @@ class Pedestrian:
         else:
             best = -1
             cost = math.inf
+            normalization_var = np.amax(neighbour_costs) /2*3
             for i in range(4):#check all sides
-                if neighbour_costs[i] != -2 and cost > neighbour_costs[i]:
-                    cost = neighbour_costs[i]
-                    best = i
+                if neighbour_costs[i] != -2:
+                    #print("##################")
+                    #print("Direction:", i)
+                    #print("Cost before adding interaction_cost", neighbour_costs[i])
+                    #print("The Cost", self.interaction_cost_multicell(i))
+                    
+                    neighbour_costs[i] += self.interaction_cost_multicell(i) * normalization_var
+                    #print("Cost after adding interaction_cost", neighbour_costs[i])
+
+                    if cost > neighbour_costs[i]:
+                        cost = neighbour_costs[i]
+                        best = i
             if best != -1: #There is a possible way
+                #if self.last_cost < cost:
+                #    return
+                #else:
                 self.forward_multicell(best)
-                print("Best direction is:", best)
+                    #print("Best direction is:", best)
+                self.calculate_center()
+                    #self.last_cost = cost
+                
             
     def exit_multicell(self):
         self.grid_map.set_state_block(self.corners, self.size, S_EMPTY)
+        print("Removed Pedestrian")
         self.ca_model.remove_pedestrian(self)
 
     def pedestrian_end_check(self, n_costs):
@@ -92,6 +114,57 @@ class Pedestrian:
                 ###end the pedestrian
                 return True
         return False
+
+    def interaction_cost_multicell(self, direction):
+        neighbour_center = []
+        if direction == D_TOP: #average of left top corner and right top with x values -1
+            neighbour_center = [(self.corners[0][0] + self.corners[1][0])/2 - 1, (self.corners[0][1] + self.corners[1][1])/2]
+        elif direction == D_RIGHT:
+            neighbour_center = [(self.corners[1][0] + self.corners[3][0])/2, (self.corners[1][1] + self.corners[3][1])/2 + 1]
+        elif direction == D_BOTTOM:
+            neighbour_center = [(self.corners[2][0] + self.corners[3][0])/2 + 1, (self.corners[2][1] + self.corners[3][1])/2]
+        elif direction == D_LEFT:
+            neighbour_center = [(self.corners[0][0] + self.corners[2][0])/2, (self.corners[0][1] + self.corners[2][1])/2 - 1]
+        cost = self.interaction_cost_multicell_calculator( neighbour_center)
+        #print("Interaction Cost:", cost)
+        return cost
+
+    def interaction_cost_multicell_calculator(self, neighbour_position):
+        total_cost = 0
+        for center in self.centers:
+            if center != self.position:    
+                r = np.linalg.norm(np.array(center) - np.array(neighbour_position))
+                if r < self.r_max:
+                    total_cost = np.exp(1/(r ** 2 - self.r_max ** 2))
+        return total_cost
+    
+    def threaded_interaction_cost_multicell_calculator(self, direction, neighbour_position):
+        total_cost = 0
+        print("The center List:", self.centers)
+        for center in self.centers:
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                #future = executor.submit(foo, 'world!')
+                if center != self.position:
+                    print("HI!!!!")
+                    future = executor.submit(self.thread_interaction, center, neighbour_position, self.r_max)
+                    #print("Thread Result:", future.result())
+                    total_cost += future.result()
+                
+                    #r = np.linalg.norm(np.array(center) - np.array(neighbour_position))
+                    #if r < self.r_max:
+                        #total_cost = np.exp(r ** 2 - self.r_max ** 2)
+        return total_cost
+
+    def thread_interaction(self, center, neighbour_position, r_max):
+        r = np.linalg.norm(np.array(center) - np.array(neighbour_position))
+        #print("R is:", r)
+        if r < r_max:
+            print("center:", center)
+            print("neighbour position", neighbour_position)
+            print("Result is: ", np.exp(r ** 2 - r_max ** 2) + self.size)
+            return (np.exp(r ** 2 - r_max ** 2) + self.size)
+        else:
+            return 0
 
     def forward_multicell(self, direction):##move size many blocks into the direction.
 
@@ -167,3 +240,10 @@ class Pedestrian:
             total_interaction_cost += cost
 
         return total_interaction_cost
+
+    def calculate_center(self):
+        self.position = [(self.corners[0][0] + self.corners[3][0])/2, (self.corners[0][1] + self.corners[3][1])/2]
+
+    def update_center_list(self, center_list):
+        self.centers = center_list
+    

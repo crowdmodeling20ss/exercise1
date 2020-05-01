@@ -50,7 +50,7 @@ def scenario_6():
     grid_size = (side, side)
 
     # TODO: pedestrians with 6m uniformly distributed
-    pedestrian_locations = [(side - 3, 0)]
+    pedestrian_locations = [(side - 3, 0), (side-2, 0), (side-4, 0)]
 
     obstacle_locations = []
     target_locations = []
