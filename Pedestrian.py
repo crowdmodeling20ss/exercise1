@@ -100,10 +100,10 @@ class Pedestrian:
                     #print("Direction:", i)
                     #print("Cost before adding interaction_cost", neighbour_costs[i])
                     #print("The Cost", self.interaction_cost_multicell(i))
-                    #interaction_cost = self.interaction_cost_multicell(i) * normalization_var
-                    #neighbour_costs[i] += interaction_cost
-                    #interaction_cost_tmp.append(interaction_cost) # DEBUG PURPOSE
-                    #print("Cost after adding interaction_cost", neighbour_costs[i])
+                    interaction_cost = self.interaction_cost_multicell(i) * normalization_var
+                    neighbour_costs[i] += interaction_cost
+                    interaction_cost_tmp.append(interaction_cost) # DEBUG PURPOSE
+                    print("Cost after adding interaction_cost", neighbour_costs[i])
 
                     if cost > neighbour_costs[i]:
                         cost = neighbour_costs[i]
@@ -185,7 +185,6 @@ class Pedestrian:
             return 0
 
     def forward_multicell(self, direction):##move size many blocks into the direction.
-
         #####UPDATE CORNERS: 
         if direction == D_TOP:# row -1
             self.grid_map.set_state_multicell(self.corners[2], D_BOTTOM,self.size, S_EMPTY ) #Empty the existing cells that move

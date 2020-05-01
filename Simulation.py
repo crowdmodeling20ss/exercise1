@@ -158,14 +158,24 @@ def main():
     ## Multiple example
     multiple_speed = [[4, 20], [10, 20], [13.3, 20]]
     rimea_1_cullular_model = CellularModel(rimea_1_map, multiple_speed, True)
+    runSimulation(rimea_1_cullular_model)
+    """
+
+    """
+    map1 = GridCreator(np.array([
+        [1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 2, 0, 0, 0],
+        [0, 2, 0, 0, 0],
+        [1, 2, 0, 0, 4]]), 1)
+    runSimulation(CellularModel(Map(10, 10, map1.grid, map1.corners)))
     """
 
     ## FILE CONFIGURABLE SCENARIO
     CONFIGURABLE_grid = create_grid()
-    CONFIGURABLE_the_grid = GridCreator(CONFIGURABLE_grid, 1)
+    CONFIGURABLE_the_grid = GridCreator(CONFIGURABLE_grid, 4)
     CONFIGURABLE_map_obj = Map(CONFIGURABLE_the_grid.grid.shape[0], CONFIGURABLE_the_grid.grid.shape[1], CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners)
-    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, [20, 30])
-
+    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj)
     runSimulation(CONFIGURABLE_model)
 
 def runSimulation(ca_model, velocity_graph_enabled=False):
@@ -186,7 +196,7 @@ def runSimulation(ca_model, velocity_graph_enabled=False):
         elapsed = done - start
         print(elapsed)
         plt.cla()
-        plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='lower', cmap=cmap, norm=norm)
+        plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
         plt.pause(0.01)
         simulation_boolean = ca_model.end_simulation()
 
