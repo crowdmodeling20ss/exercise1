@@ -150,7 +150,12 @@ def main():
     ## RIMEA_1
     rimea_1_grid = GridCreator(RIMEA_SCENARIO_1, 4)
     rimea_1_map = Map(10, 10, rimea_1_grid.grid, rimea_1_grid.corners)
-    rimea_1_cullular_model = CellularModel(rimea_1_map)
+    ### Single example
+    #single_speed = [13.3, 20]
+    #rimea_1_cullular_model = CellularModel(rimea_1_map, single_speed)
+    ### Multiple example
+    multiple_speed = [[4, 20], [10, 20], [13.3, 20]]
+    rimea_1_cullular_model = CellularModel(rimea_1_map, multiple_speed, True)
 
     ## FILE CONFIGURABLE SCENARIO
     """

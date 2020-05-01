@@ -15,8 +15,10 @@ class CellularModel:
     :type grid_map: Map
     """
 
-    def __init__(self, grid_map):
+    def __init__(self, grid_map, speeds=None, speed_per_pedestrian=False):
         self.pedestrians = []
+        self.speeds = speeds if speed_per_pedestrian else [speeds]
+        self.speed_per_pedestrian = speed_per_pedestrian
         self.grid_map = grid_map
         self.import_pedestrians_from_map()
 
@@ -39,7 +41,7 @@ class CellularModel:
             r_max = self.get_size() * 2
             print("R_max:", r_max)
             center = Util.calculate_center(corners)
-            self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, center, None, self.grid_map.corners[p_id], r_max))
+            self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, center, self.get_pedestrian_speed(p_id), self.grid_map.corners[p_id], r_max))
 
     def get_size(self):
         #print("Corners:", self.corners)
@@ -56,3 +58,9 @@ class CellularModel:
             return False
         else:
             return True
+
+    def get_pedestrian_speed(self, p_id):
+        if self.speed_per_pedestrian:
+            return self.speeds[p_id]
+        else:
+            return self.speeds[0]
