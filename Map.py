@@ -66,7 +66,7 @@ class Map:
                     #Check if break works:
                 else:
                     direction_cost += self.cost_map[corners[0][0]-1][corners[0][1]+i]
-            return direction_cost
+            return direction_cost / 4.0
         else:
             direction_cost = -2 #invalid neighbour
             return direction_cost
@@ -86,7 +86,7 @@ class Map:
                     
                 else:
                     direction_cost += self.cost_map[corners[1][0]+i][corners[1][1]+1]
-            return direction_cost
+            return direction_cost / 4.0
         else:
             direction_cost = -2 #invalid neighbour
             return direction_cost
@@ -106,7 +106,7 @@ class Map:
                     return direction_cost
                 else:
                     direction_cost += self.cost_map[corners[2][0]+1][corners[2][1]+i]
-            return direction_cost
+            return direction_cost / 4.0
         else:
             direction_cost = -2 #invalid neighbour
             return direction_cost
@@ -126,7 +126,7 @@ class Map:
                     return direction_cost
                 else:
                     direction_cost += self.cost_map[corners[0][0]+i][corners[0][1]-1]
-            return direction_cost
+            return direction_cost / 4.0
         else:
             direction_cost = -2 #invalid neighbour
             return direction_cost

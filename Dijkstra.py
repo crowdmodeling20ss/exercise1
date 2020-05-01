@@ -1,5 +1,6 @@
 import math
 import queue
+import time
 
 import numpy as np
 
@@ -17,7 +18,8 @@ class Dijkstra:
         self.__obstacle_cost_max()
 
     def calculate_cost_map(self):
-        print('Starting djikstra algorithm 1')
+        time_string = time.strftime("%m/%d/%Y, %H:%M:%S", time.localtime())
+        print('Starting djikstra algorithm 1 '+time_string)
         for t in self.grid_map.get_target_positions():  # djikstra calculates cost according to all targets
             self.__empty_visited_grid()
             self.__set_visited(t)
@@ -32,7 +34,8 @@ class Dijkstra:
                 elif self.__get_cost(current_position) == 0:  # if the cost is 0 then a new cost has not been assigned
                     self.__set_cost(current_position, new_cost)
                 self.__add_neighbour_to_queue(position_tuple[0], position_tuple[1])
-
+        time_string = time.strftime("%m/%d/%Y, %H:%M:%S", time.localtime())
+        print("finish "+time_string)
         return self.scale_cost(self.__cost_map)
 
     def scale_cost(self, cost_map):

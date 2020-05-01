@@ -175,10 +175,10 @@ def main():
     CONFIGURABLE_grid = create_grid()
     CONFIGURABLE_the_grid = GridCreator(CONFIGURABLE_grid, 4)
     CONFIGURABLE_map_obj = Map(CONFIGURABLE_the_grid.grid.shape[0], CONFIGURABLE_the_grid.grid.shape[1], CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners)
-    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj)
+    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, [13, 20])
     runSimulation(CONFIGURABLE_model)
 
-def runSimulation(ca_model, velocity_graph_enabled=False):
+def runSimulation(ca_model, velocity_graph_enabled=True):
     cmap = colors.ListedColormap(['white', 'red', 'Black', 'blue'])
     bounds = [0, 1, 2, 3, 4]
     norm = colors.BoundaryNorm(bounds, cmap.N)

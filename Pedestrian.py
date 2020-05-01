@@ -28,6 +28,7 @@ class Pedestrian:
         self.total_path = 0.0
         self.age = 0.0
         self.visited_path = [position]
+        self.path_cost_history = []
         self.distance_cost_history = []
         self.interaction_cost_history = []
         #self.last_cost = math.inf
@@ -100,10 +101,10 @@ class Pedestrian:
                     #print("Direction:", i)
                     #print("Cost before adding interaction_cost", neighbour_costs[i])
                     #print("The Cost", self.interaction_cost_multicell(i))
-                    interaction_cost = self.interaction_cost_multicell(i) * normalization_var
+                    interaction_cost = self.interaction_cost_multicell(i)# * normalization_var
                     neighbour_costs[i] += interaction_cost
                     interaction_cost_tmp.append(interaction_cost) # DEBUG PURPOSE
-                    print("Cost after adding interaction_cost", neighbour_costs[i])
+                    #print("Cost after adding interaction_cost", neighbour_costs[i])
 
                     if cost > neighbour_costs[i]:
                         cost = neighbour_costs[i]
@@ -116,7 +117,6 @@ class Pedestrian:
                 #    return
                 #else:
                 self.forward_multicell(best)
-
 
     def exit_multicell(self):
         self.p_state = P_EXIT
@@ -209,6 +209,7 @@ class Pedestrian:
                 self.corners[i] = [self.corners[i][0], self.corners[i][1] -1]
 
         self.position = Util.calculate_center(self.corners)
+        self.path_cost_history.append(self.position)
         self.p_state = P_WALKING
 
 
