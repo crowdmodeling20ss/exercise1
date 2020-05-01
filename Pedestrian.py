@@ -47,7 +47,7 @@ class Pedestrian:
             self.exit()
         else:
             self.forward(next_position)
-            print(next_position)
+            #print(next_position)
 
     def tick_multicell(self):
         self.get_best_next_position_Multicell()
@@ -206,9 +206,9 @@ class Pedestrian:
         neighbours = self.grid_map.get_neighbours(self.position)
         empty_neighbours = [n for n in neighbours if [S_EMPTY, S_TARGET].count(self.grid_map.get_state(n))]
         if len(empty_neighbours) == 0:
-            print("self.position:" + str(self.position) + str(neighbours) + str(empty_neighbours))
-            print("MAP")
-            print(str(self.grid_map.data))
+            #print("self.position:" + str(self.position) + str(neighbours) + str(empty_neighbours))
+            #print("MAP")
+           # print(str(self.grid_map.data))
             return self.position
 
         # Distance Cost
@@ -218,7 +218,7 @@ class Pedestrian:
             distance_cost = []
             for n in empty_neighbours:
                 distance_cost.append(self.grid_map.get_cost(n))
-                print(distance_cost)
+                #print(distance_cost)
 
         # TODO: add interaction cost to distance cost
         # Interaction Cost

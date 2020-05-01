@@ -8,13 +8,16 @@ P_WAITING = 1
 P_EXIT = 2
 
 # Default values
-S_FILENAME = "exercise1/scenario.txt"
+S_FILENAME = "scenario.txt"
 S_SPEED = 0
 S_AVOIDANCE = 0
 PEDESTRIAN_SIZE = 40  # Cm
-SCENARIO_4_LINE_MOVEMENT_PEDESTRIANS = 20  # Number of pedestrians for line movement in Scenario 4
+PEDESTRIAN_SIZE_SCENARIO_4 = 20  # With 40 cm, 6 pedestrians cannot fit in 1 sqm area
+SCENARIO_4_LINES = 10  # Number of lines for line movement
 SCENARIO_7_WIDTH = 20  # M
 SCENARIO_7_LENGTH = 200  # M
+MINIMUM_BORDER_LENGTH_SCENARIO_4 = 400  # M
+MINIMUM_BORDER_LENGTH_SCENARIO_7 = 10  # M
 
 # TODO: We can increase number of direction later
 DIRECTIONS = [[-1, 0],  # North

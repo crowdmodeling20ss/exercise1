@@ -1,1 +1,1 @@
-Scenario: 6 line_movement = False
+6 0 0.5

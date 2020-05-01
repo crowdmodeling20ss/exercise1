@@ -1,0 +1,4 @@
+Grid Size = (5,5)
+Pedestrian = [(3,4),(0,1)]
+Target = [(4,4)]
+Obstacle = [(2,2),(1,0)]
