@@ -21,14 +21,17 @@ class Pedestrian:
         self.grid_map = grid_map
         self.position = position
         self.corners = corners #left-top, right-top, left-bottom, right-bottom
-        self.desired_speeds = desired_speeds if desired_speeds is None else self.get_initial_speeds()
+        self.desired_speeds = desired_speeds if desired_speeds != None else self.get_initial_speeds()
         self.size = self.get_size()#This is to understand how many blocks does the ped. has in ints width/height
         self.r_max = r_max
+        self.p_state = P_INIT
+        self.total_path = 0.0
+        self.age = 0.0
         self.visited_path = [position]
         self.distance_cost_history = []
         self.interaction_cost_history = []
         #self.last_cost = math.inf
-        
+
 
     def get_size(self):
         #print("Corners:", self.corners)
@@ -36,8 +39,7 @@ class Pedestrian:
         return abs(self.corners[0][1] - self.corners[1][1])+1 ###+1 or NOT
 
     def get_initial_speeds(self):
-        return [min(self.grid_map.width, self.grid_map.height),
-                np.sqrt(self.grid_map.width ** 2 + self.grid_map.height ** 2)]
+        return [self.get_size(), np.sqrt(self.get_size() ** 2 + self.get_size() ** 2)]
 
     def tick(self):
         next_position = self.get_best_next_position(1)
@@ -50,10 +52,17 @@ class Pedestrian:
             #print(next_position)
 
     def tick_multicell(self):
-        self.get_best_next_position_Multicell()
-        #print("corners:", self.corners)
-        
+        self.age += 1.0
+        while self.p_state != P_EXIT and self.velocity() < self.desired_speeds[0]:
+            previous_position = np.array(self.position)
+            self.get_best_next_position_Multicell()
+            distance = np.linalg.norm(np.array(self.position) - previous_position)
+            self.total_path += distance
 
+        self.visited_path.append(self.position)
+
+    def velocity(self):
+        return self.total_path / self.age
 
     def forward(self, next_position):
         self.grid_map.set_state(next_position, S_PEDESTRIAN)
@@ -62,6 +71,7 @@ class Pedestrian:
         self.visited_path.append(next_position)
 
     def exit(self):
+        self.p_state = P_EXIT
         self.grid_map.set_state(self.position, S_EMPTY)
         self.ca_model.remove_pedestrian(self)
 
@@ -75,7 +85,7 @@ class Pedestrian:
         ## we will get a vector with costs of [top, right, bottom. left]
         ##The cost of -1 means that the neighbor of that side has a target
         ##The cost of -2 means that the neighbor of that side has a obstacle or ped. so we cant move there.
-        
+
         ##The interaction cost is not added yet.
         if self.pedestrian_end_check(neighbour_costs) == True:
             self.exit_multicell()
@@ -106,9 +116,10 @@ class Pedestrian:
                 #    return
                 #else:
                 self.forward_multicell(best)
-                
-            
+
+
     def exit_multicell(self):
+        self.p_state = P_EXIT
         self.grid_map.set_state_block(self.corners, self.size, S_EMPTY)
         print("Removed Pedestrian")
         self.ca_model.remove_pedestrian(self)
@@ -143,7 +154,7 @@ class Pedestrian:
                 if r < self.r_max:
                     total_cost = np.exp(1/(r ** 2 - self.r_max ** 2))
         return total_cost
-    
+
     def threaded_interaction_cost_multicell_calculator(self, direction, neighbour_position):
         total_cost = 0
         print("The center List:", [p.position for p in self.ca_model.pedestrians])
@@ -156,7 +167,7 @@ class Pedestrian:
                     future = executor.submit(self.thread_interaction, center, neighbour_position, self.r_max)
                     #print("Thread Result:", future.result())
                     total_cost += future.result()
-                
+
                     #r = np.linalg.norm(np.array(center) - np.array(neighbour_position))
                     #if r < self.r_max:
                         #total_cost = np.exp(r ** 2 - self.r_max ** 2)
@@ -199,9 +210,9 @@ class Pedestrian:
                 self.corners[i] = [self.corners[i][0], self.corners[i][1] -1]
 
         self.position = Util.calculate_center(self.corners)
-        self.visited_path.append(self.position)
-    
-    
+        self.p_state = P_WALKING
+
+
     def get_best_next_position(self, Dijkstra_boolean=0):
         neighbours = self.grid_map.get_neighbours(self.position)
         empty_neighbours = [n for n in neighbours if [S_EMPTY, S_TARGET].count(self.grid_map.get_state(n))]
@@ -250,4 +261,4 @@ class Pedestrian:
             total_interaction_cost += cost
 
         return total_interaction_cost
-    
+
