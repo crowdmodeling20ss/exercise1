@@ -3,10 +3,11 @@ from Constant import *
 import numpy as np
 import math
 import concurrent.futures
+import Util
 
 
 class Pedestrian:
-    def __init__(self, p_id, ca_model, grid_map, position, desired_speeds=None, corners=None, centers=None, r_max = 0):
+    def __init__(self, p_id, ca_model, grid_map, position, desired_speeds=None, corners=None, r_max = 0):
         """
         :param p_id: Pedestrian Id
         :param ca_model: CellularModel
@@ -23,7 +24,6 @@ class Pedestrian:
         self.desired_speeds = desired_speeds if desired_speeds is None else self.get_initial_speeds()
         self.visited_path = [position]
         self.size = self.get_size()#This is to understand how many blocks does the ped. has in ints width/height
-        self.centers = centers
         self.r_max = r_max
         #self.last_cost = math.inf
         
@@ -98,9 +98,6 @@ class Pedestrian:
                 #    return
                 #else:
                 self.forward_multicell(best)
-                    #print("Best direction is:", best)
-                self.calculate_center()
-                    #self.last_cost = cost
                 
             
     def exit_multicell(self):
@@ -131,8 +128,9 @@ class Pedestrian:
 
     def interaction_cost_multicell_calculator(self, neighbour_position):
         total_cost = 0
-        for center in self.centers:
-            if center != self.position:    
+        for p in self.ca_model.pedestrians:
+            if p != self:
+                center = p.position
                 r = np.linalg.norm(np.array(center) - np.array(neighbour_position))
                 if r < self.r_max:
                     total_cost = np.exp(1/(r ** 2 - self.r_max ** 2))
@@ -140,11 +138,12 @@ class Pedestrian:
     
     def threaded_interaction_cost_multicell_calculator(self, direction, neighbour_position):
         total_cost = 0
-        print("The center List:", self.centers)
-        for center in self.centers:
+        print("The center List:", [p.position for p in self.ca_model.pedestrians])
+        for p in self.ca_model.pedestrians:
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 #future = executor.submit(foo, 'world!')
-                if center != self.position:
+                if p != self:
+                    center = p.position
                     print("HI!!!!")
                     future = executor.submit(self.thread_interaction, center, neighbour_position, self.r_max)
                     #print("Thread Result:", future.result())
@@ -190,6 +189,8 @@ class Pedestrian:
             self.grid_map.set_state_multicell([self.corners[0][0], self.corners[0][1]-1],D_LEFT, self.size, S_PEDESTRIAN)
             for i in range(4):
                 self.corners[i] = [self.corners[i][0], self.corners[i][1] -1]
+
+        self.position = Util.calculate_center(self.corners)
     
     
     def get_best_next_position(self, Dijkstra_boolean=0):
@@ -240,10 +241,4 @@ class Pedestrian:
             total_interaction_cost += cost
 
         return total_interaction_cost
-
-    def calculate_center(self):
-        self.position = [(self.corners[0][0] + self.corners[3][0])/2, (self.corners[0][1] + self.corners[3][1])/2]
-
-    def update_center_list(self, center_list):
-        self.centers = center_list
     
