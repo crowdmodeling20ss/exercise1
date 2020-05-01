@@ -54,6 +54,7 @@ class CellularModel:
         return abs(self.grid_map.corners[0][0][1] - self.grid_map.corners[0][1][1])+1 ###+1 or NOT
 
     def remove_pedestrian(self, pedestrian):
+        self.grid_map.set_state_block(pedestrian.corners, pedestrian.size, S_EMPTY)
         self.pedestrians.remove(pedestrian)
 
     def calculate_center(self):

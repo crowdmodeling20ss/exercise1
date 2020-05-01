@@ -53,7 +53,7 @@ class Map:
 
     def neighbour_check_top(self, corners, size):
         direction_cost = 0
-        if 0 <= (corners[0][0] -1) <= len(self.data):
+        if 0 <= (corners[0][0] -1) < len(self.data):
             for i in range(size):
                 curr_point = self.data[corners[0][0]-1][corners[0][1]+i]
                 if curr_point == S_TARGET:
@@ -73,7 +73,7 @@ class Map:
 
     def neighbour_check_right(self, corners, size):
         direction_cost = 0
-        if 0 <= (corners[1][1] + 1) <= len(self.data):
+        if 0 <= (corners[1][1] + 1) < len(self.data):
             for i in range(size):
                 curr_point = self.data[corners[1][0] + i][corners[1][1]+1]
                 if curr_point == S_TARGET:
@@ -93,7 +93,7 @@ class Map:
     
     def neighbour_check_bottom(self, corners, size):
         direction_cost = 0
-        if 0 <= (corners[2][0] +1) <= len(self.data):
+        if 0 <= (corners[2][0] +1) < len(self.data):
             for i in range(size):
                 curr_point = self.data[corners[2][0]+1][corners[2][1]+i]
                 if curr_point == S_TARGET:
@@ -113,7 +113,7 @@ class Map:
 
     def neighbour_check_left(self, corners, size):
         direction_cost = 0
-        if 0 <= (corners[0][1] -1) <= len(self.data):
+        if 0 <= (corners[0][1] -1) < len(self.data):
             for i in range(size):
                 curr_point = self.data[corners[0][0]+i][corners[0][1]-1]
                 if curr_point == S_TARGET:
@@ -187,7 +187,9 @@ class Map:
     def set_state_block(self, corners, size, block_type): #to destroy pedestrians.
         for r in range(size):
             for c in range(size):
+
                 self.data[corners[0][0]+r][corners[0][0]+c] = block_type
+                print("The new value is :", self.data[corners[0][0]+r][corners[0][0]+c])
 
     # TODO:
     """
