@@ -100,9 +100,9 @@ class Pedestrian:
                     #print("Direction:", i)
                     #print("Cost before adding interaction_cost", neighbour_costs[i])
                     #print("The Cost", self.interaction_cost_multicell(i))
-                    interaction_cost = self.interaction_cost_multicell(i) * normalization_var
-                    neighbour_costs[i] += interaction_cost
-                    interaction_cost_tmp.append(interaction_cost) # DEBUG PURPOSE
+                    #interaction_cost = self.interaction_cost_multicell(i) * normalization_var
+                    #neighbour_costs[i] += interaction_cost
+                    #interaction_cost_tmp.append(interaction_cost) # DEBUG PURPOSE
                     #print("Cost after adding interaction_cost", neighbour_costs[i])
 
                     if cost > neighbour_costs[i]:

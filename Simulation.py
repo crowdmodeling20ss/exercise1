@@ -10,6 +10,7 @@ from ScenarioGrids import create_grid
 from GridCreator import GridCreator
 
 from ScenarioGrids import create_grid
+from matplotlib import colors
 from NewScenarios import *
 
 def main():
@@ -148,26 +149,31 @@ def main():
     """
 
     ## RIMEA_1
+    """
     rimea_1_grid = GridCreator(RIMEA_SCENARIO_1, 4)
     rimea_1_map = Map(10, 10, rimea_1_grid.grid, rimea_1_grid.corners)
-    ### Single example
-    #single_speed = [13.3, 20]
-    #rimea_1_cullular_model = CellularModel(rimea_1_map, single_speed)
-    ### Multiple example
+    ## Single example
+    single_speed = [13.3, 20]
+    rimea_1_cullular_model = CellularModel(rimea_1_map, single_speed)
+    ## Multiple example
     multiple_speed = [[4, 20], [10, 20], [13.3, 20]]
     rimea_1_cullular_model = CellularModel(rimea_1_map, multiple_speed, True)
+    """
 
     ## FILE CONFIGURABLE SCENARIO
-    """
     CONFIGURABLE_grid = create_grid()
-    CONFIGURABLE_the_grid = GridCreator(CONFIGURABLE_grid, 4)
+    CONFIGURABLE_the_grid = GridCreator(CONFIGURABLE_grid, 1)
     CONFIGURABLE_map_obj = Map(CONFIGURABLE_the_grid.grid.shape[0], CONFIGURABLE_the_grid.grid.shape[1], CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners)
-    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj)
-    """
+    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, [20, 30])
 
-    runSimulation(rimea_1_cullular_model)
+    runSimulation(CONFIGURABLE_model)
 
 def runSimulation(ca_model, velocity_graph_enabled=False):
+    cmap = colors.ListedColormap(['white', 'red', 'Black', 'blue'])
+    bounds = [0, 1, 2, 3, 4]
+    norm = colors.BoundaryNorm(bounds, cmap.N)
+
+
     simulation_boolean = True
     time_tick = []
     path_pedestrians = [[] for _ in range(len(ca_model.pedestrians))]
@@ -180,7 +186,7 @@ def runSimulation(ca_model, velocity_graph_enabled=False):
         elapsed = done - start
         print(elapsed)
         plt.cla()
-        plt.imshow(ca_model.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
+        plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='lower', cmap=cmap, norm=norm)
         plt.pause(0.01)
         simulation_boolean = ca_model.end_simulation()
 
