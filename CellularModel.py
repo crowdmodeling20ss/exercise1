@@ -39,7 +39,7 @@ class CellularModel:
             r_max = self.get_size() * 2
             print("R_max:", r_max)
             center = Util.calculate_center(corners)
-            self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, center, 0, self.grid_map.corners[p_id], r_max))
+            self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, center, None, self.grid_map.corners[p_id], r_max))
 
     def get_size(self):
         #print("Corners:", self.corners)

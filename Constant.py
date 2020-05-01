@@ -3,9 +3,10 @@ S_PEDESTRIAN = 1
 S_OBSTACLE = 2
 S_TARGET = 4
 
-P_WALKING = 0
+P_INIT = 0
 P_WAITING = 1
-P_EXIT = 2
+P_WALKING = 2
+P_EXIT = 3
 
 # Default values
 S_FILENAME = "scenario.txt"
