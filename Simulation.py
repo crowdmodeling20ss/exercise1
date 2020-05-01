@@ -108,16 +108,18 @@ def main():
         [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
-    
+
+    RIMEA_SCENARIO_1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+                                [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4]])
+    """
     # Runs the scenario in scenario.txt
     #grid = create_grid()
-
-    the_grid = GridCreator(RIMEA_SCENARIO_6,4)
+    the_grid = GridCreator(RIMEA_SCENARIO_6, 4)
     #print(the_grid.grid.shape[0])
     #print(the_grid.grid.shape[1])
-    
-
-
     map_obj = Map(the_grid.grid.shape[0], the_grid.grid.shape[1], the_grid.grid, the_grid.corners)
 
     print(the_grid.corners)
@@ -165,7 +167,34 @@ def main():
         plt.imshow(cm.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
         plt.pause(0.5)
         simulation_boolean = cm.end_simulation()
+    """
 
+    ## RIMEA_1
+    rimea_1_grid = GridCreator(RIMEA_SCENARIO_1, 4)
+    rimea_1_map = Map(rimea_1_grid.grid.shape[0], rimea_1_grid.grid.shape[1], rimea_1_grid.grid, rimea_1_grid.corners)
+    rimea_1_cullular_model = CellularModel(rimea_1_map)
+
+    show_cost_map(rimea_1_map.cost_map, 10)
+
+    simulation_boolean = True
+    while simulation_boolean == True:
+        start = time.time()
+        rimea_1_cullular_model.tick()
+        done = time.time()
+        elapsed = done - start
+        print(elapsed)
+        plt.cla()
+        plt.imshow(rimea_1_cullular_model.grid_map.data, origin='upper', interpolation='none', clim=(0, 8))
+        plt.pause(0.01)
+        simulation_boolean = rimea_1_cullular_model.end_simulation()
+
+def show_cost_map(cost_map, duration):
+    print('Calculated cost Map')
+    print(cost_map)
+    plt.imshow(cost_map, cmap='Blues', interpolation='nearest')
+    plt.show()
+    plt.pause(duration)
+    plt.cla()
 
 if __name__ == '__main__':
     main()
