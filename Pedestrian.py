@@ -22,9 +22,11 @@ class Pedestrian:
         self.position = position
         self.corners = corners #left-top, right-top, left-bottom, right-bottom
         self.desired_speeds = desired_speeds if desired_speeds is None else self.get_initial_speeds()
-        self.visited_path = [position]
         self.size = self.get_size()#This is to understand how many blocks does the ped. has in ints width/height
         self.r_max = r_max
+        self.visited_path = [position]
+        self.distance_cost_history = []
+        self.interaction_cost_history = []
         #self.last_cost = math.inf
         
 
@@ -69,6 +71,7 @@ class Pedestrian:
         #print("get best next position size", self.size)
 
         neighbour_costs = self.grid_map.get_neighbours_multicell(self.corners, self.size)
+        self.distance_cost_history.append(neighbour_costs.copy())
         ## we will get a vector with costs of [top, right, bottom. left]
         ##The cost of -1 means that the neighbor of that side has a target
         ##The cost of -2 means that the neighbor of that side has a obstacle or ped. so we cant move there.
@@ -80,19 +83,24 @@ class Pedestrian:
             best = -1
             cost = math.inf
             normalization_var = np.amax(neighbour_costs) /2*3
+            interaction_cost_tmp = [] # DEBUG PURPOSE
             for i in range(4):#check all sides
                 if neighbour_costs[i] != -2:
                     #print("##################")
                     #print("Direction:", i)
                     #print("Cost before adding interaction_cost", neighbour_costs[i])
                     #print("The Cost", self.interaction_cost_multicell(i))
-                    
-                    neighbour_costs[i] += self.interaction_cost_multicell(i) * normalization_var
+                    interaction_cost = self.interaction_cost_multicell(i) * normalization_var
+                    neighbour_costs[i] += interaction_cost
+                    interaction_cost_tmp.append(interaction_cost) # DEBUG PURPOSE
                     #print("Cost after adding interaction_cost", neighbour_costs[i])
 
                     if cost > neighbour_costs[i]:
                         cost = neighbour_costs[i]
                         best = i
+                else:
+                    interaction_cost_tmp.append(0) # DEBUG PURPOSE
+            self.interaction_cost_history.append(interaction_cost_tmp) # DEBUG PURPOSE
             if best != -1: #There is a possible way
                 #if self.last_cost < cost:
                 #    return
@@ -191,6 +199,7 @@ class Pedestrian:
                 self.corners[i] = [self.corners[i][0], self.corners[i][1] -1]
 
         self.position = Util.calculate_center(self.corners)
+        self.visited_path.append(self.position)
     
     
     def get_best_next_position(self, Dijkstra_boolean=0):

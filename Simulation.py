@@ -174,9 +174,13 @@ def main():
     rimea_1_map = Map(rimea_1_grid.grid.shape[0], rimea_1_grid.grid.shape[1], rimea_1_grid.grid, rimea_1_grid.corners)
     rimea_1_cullular_model = CellularModel(rimea_1_map)
 
-    show_cost_map(rimea_1_map.cost_map, 10)
+    #show_cost_map(rimea_1_map.cost_map, 10)
 
     simulation_boolean = True
+    time_tick = []
+    path_pedestrians = [[] for _ in range(len(rimea_1_cullular_model.pedestrians))]
+    velocity_pedestrians = [[] for _ in range(len(rimea_1_cullular_model.pedestrians))]
+    time_counter = 0
     while simulation_boolean == True:
         start = time.time()
         rimea_1_cullular_model.tick()
@@ -188,6 +192,20 @@ def main():
         plt.pause(0.01)
         simulation_boolean = rimea_1_cullular_model.end_simulation()
 
+        time_counter += 1
+        for i, p in enumerate(rimea_1_cullular_model.pedestrians, start=0):
+            last_distance = 0 if len(path_pedestrians[i])==0 else path_pedestrians[i][time_counter-2]
+            last_position = np.array(p.visited_path[len(p.visited_path)-2])
+            current_position = np.array(p.visited_path[len(p.visited_path)-1]) # or p.position
+            distance = np.linalg.norm(current_position - last_position)
+            total_distance = last_distance + distance
+
+            path_pedestrians[i].append(total_distance)
+            velocity_pedestrians[i].append(distance)
+            time_tick.append(time_counter)
+
+    show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick)
+
 def show_cost_map(cost_map, duration):
     print('Calculated cost Map')
     print(cost_map)
@@ -195,6 +213,19 @@ def show_cost_map(cost_map, duration):
     plt.show()
     plt.pause(duration)
     plt.cla()
+
+def show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick):
+    plt.cla()
+    for i in range(len(path_pedestrians)):
+        plt.plot(time_tick, velocity_pedestrians[i], label="Velocity")
+        plt.plot(time_tick, path_pedestrians[i], label="Path")
+    plt.xlabel('Time')
+    plt.ylabel('Path')
+    plt.title('Path/Time Pedestrian')
+    plt.legend()
+    plt.show()
+    plt.pause(10)
+
 
 if __name__ == '__main__':
     main()
