@@ -216,10 +216,19 @@ def show_cost_map(cost_map, duration):
     plt.cla()
 
 def show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick):
+    t = len(time_tick)
+    for i in range(len(path_pedestrians)):
+        if(len(path_pedestrians[i]) < t):
+            for _ in range(t - len(path_pedestrians[i])):
+                path_pedestrians[i] += [path_pedestrians[i][len(path_pedestrians[i])-1]]
+            for _ in range(t - len(velocity_pedestrians[i])):
+                velocity_pedestrians[i] += [0]
+
+
     plt.cla()
     for i in range(len(path_pedestrians)):
         plt.plot(time_tick, velocity_pedestrians[i], label="Velocity")
-        plt.plot(time_tick, path_pedestrians[i], label="Path")
+        #plt.plot(time_tick, path_pedestrians[i], label="Path")
     plt.xlabel('Time')
     plt.ylabel('Path')
     plt.title('Path/Time Pedestrian')
