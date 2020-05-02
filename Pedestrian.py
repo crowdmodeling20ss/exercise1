@@ -121,7 +121,7 @@ class Pedestrian:
     def exit_multicell(self):
         self.p_state = P_EXIT
         self.grid_map.set_state_block(self.corners, self.size, S_EMPTY)
-        print("Removed Pedestrian")
+        print("Removed Pedestrian p_id:" + str(self.p_id) + " center:" + str(self.position))
         self.ca_model.remove_pedestrian(self)
 
     def pedestrian_end_check(self, n_costs):
@@ -177,9 +177,9 @@ class Pedestrian:
         r = np.linalg.norm(np.array(center) - np.array(neighbour_position))
         #print("R is:", r)
         if r < r_max:
-            print("center:", center)
-            print("neighbour position", neighbour_position)
-            print("Result is: ", np.exp(r ** 2 - r_max ** 2) + self.size)
+            #print("center:", center)
+            #print("neighbour position", neighbour_position)
+            #print("Result is: ", np.exp(r ** 2 - r_max ** 2) + self.size)
             return (np.exp(r ** 2 - r_max ** 2) + self.size)
         else:
             return 0

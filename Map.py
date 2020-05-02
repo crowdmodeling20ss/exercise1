@@ -188,7 +188,7 @@ class Map:
         for r in range(size):
             for c in range(size):
                 self.data[corners[0][0]+r][corners[0][1]+c] = block_type
-                print("The new value is :", self.data[corners[0][0]+r][corners[0][1]+c])
+                #print("The new value is :", self.data[corners[0][0]+r][corners[0][1]+c])
 
     # TODO:
     """

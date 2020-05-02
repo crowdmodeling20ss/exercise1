@@ -38,7 +38,7 @@ class CellularModel:
             #print("Corners of this pedestrian:", self.grid_map.corners[p_id])
             ######DEFINE THE R_MAX
             r_max = self.get_size() * 1.5
-            print("R_max:", r_max)
+            #print("R_max:", r_max)
             center = Util.calculate_center(corners)
             self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, center, self.get_pedestrian_speed(p_id), self.grid_map.corners[p_id], r_max))
 

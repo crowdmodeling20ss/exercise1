@@ -178,7 +178,7 @@ def main():
     CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, [13, 20])
     runSimulation(CONFIGURABLE_model)
 
-def runSimulation(ca_model, velocity_graph_enabled=True):
+def runSimulation(ca_model, velocity_graph_enabled=False):
     cmap = colors.ListedColormap(['white', 'red', 'Black', 'blue'])
     bounds = [0, 1, 2, 3, 4]
     norm = colors.BoundaryNorm(bounds, cmap.N)
@@ -194,7 +194,7 @@ def runSimulation(ca_model, velocity_graph_enabled=True):
         ca_model.tick()
         done = time.time()
         elapsed = done - start
-        print(elapsed)
+
         plt.cla()
         plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
         plt.pause(0.01)

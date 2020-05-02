@@ -20,15 +20,12 @@ class GridCreator:
         self.emptyGridfiller()
 
     def createEmptyGrid(self):
-        print(self.rows)
-        print(self.columns)
         return np.zeros((self.rows * self.scale_var, self.columns * self.scale_var))
 
     def emptyGridfiller(self):
         #create an empty grid scaled with the scale_var
         for row in range(self.rows):
             for column in range(self.columns):
-                print(column)
                 if self.data[row][column] == S_EMPTY:
                     continue
                 else:

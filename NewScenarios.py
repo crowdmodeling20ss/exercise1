@@ -22,7 +22,7 @@ def read_setup_file():
         setup[0] = setup[0].strip().lower()
         setup[1] = setup[1].strip()
         obj = ast.literal_eval(setup[1])
-        print(type(obj))
+
         if setup[0] == grid_name.lower():
             grid_size = obj
         elif setup[0] == pedestrian.lower():
