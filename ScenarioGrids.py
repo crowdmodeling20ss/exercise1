@@ -1,14 +1,16 @@
 import numpy as np
+
 from Constant import *
 
 '''
     RiMEA scenarios
 '''
 
+
 def scenario_1():
     # Corridor with 2m wide and 40m long
-    width = int(200/PEDESTRIAN_SIZE)  # as number of blocks, 5x40cm = 2m
-    length = int(4000/PEDESTRIAN_SIZE)  # as number of blocks, 100x40cm = 40m = 100
+    width = int(200 / PEDESTRIAN_SIZE)  # as number of blocks, 5x40cm = 2m
+    length = int(4000 / PEDESTRIAN_SIZE)  # as number of blocks, 100x40cm = 40m = 100
     grid_size = (width, length)
     pedestrian_locations = [(2, 0)]  # halfway
     obstacle_locations = []
@@ -27,7 +29,8 @@ def scenario_4(line_movement, density):
     target_locations = []
     pedestrian_locations = []
     number_of_pedestrians = int(10 * 1000 * density)
-    minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_4 * 100) / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks, 2000 block is 400 meters, all pedestrians will be distributed before the first measuring point
+    # as number of blocks, 2000 block is 400 meters, all pedestrians will be distributed before the first measuring point
+    minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_4 * 100) / PEDESTRIAN_SIZE_SCENARIO_4)
 
     if line_movement == "true":
         width = SCENARIO_4_LINES
@@ -39,7 +42,7 @@ def scenario_4(line_movement, density):
         border = int(number_of_pedestrians / SCENARIO_4_LINES)
         for j in range(border):
             for i in range(width):
-                loc = (i,j)
+                loc = (i, j)
                 pedestrian_locations.append(loc)
     else:
         loc_x = np.random.randint(low=0, high=width, size=number_of_pedestrians)
@@ -62,6 +65,7 @@ def scenario_4(line_movement, density):
 
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
+
 def scenario_6():
     width = int(200 / PEDESTRIAN_SIZE)  # as number of blocks
     side = int(1200 / PEDESTRIAN_SIZE)  # as number of blocks
@@ -74,7 +78,7 @@ def scenario_6():
     number_of_pedestrians = 20
 
     # Place 20 pedestrian with uniform distribution
-    loc_x = np.random.randint(low=side-width, high=side, size=number_of_pedestrians)
+    loc_x = np.random.randint(low=side - width, high=side, size=number_of_pedestrians)
     loc_y = np.random.randint(low=0, high=dist_boundary, size=number_of_pedestrians)
     for k in range(number_of_pedestrians):
         loc = (loc_x[k], loc_y[k])
@@ -100,6 +104,7 @@ def scenario_6():
         target_locations.append((0, i))
 
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
+
 
 def scenario_7():
     width = int(SCENARIO_7_WIDTH * 100 / PEDESTRIAN_SIZE)  # as number of blocks
@@ -132,9 +137,12 @@ def scenario_7():
 
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
+
 '''
     Task scenarios
 '''
+
+
 def task_2():
     grid_size = (50, 50)
     pedestrian_locations = [(24, 4)]
@@ -142,17 +150,21 @@ def task_2():
     obstacle_locations = []
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
+
 def task_3():
     grid_size = (50, 50)
-    pedestrian_locations = [(24, 4), (24, 44), (4, 24), (34, 35), (34, 13)]  # Creating pedestrians in almost circular around the target
+    pedestrian_locations = [(24, 4), (24, 44), (4, 24), (34, 35),
+                            (34, 13)]  # Creating pedestrians in almost circular around the target
     target_locations = [(24, 24)]
     obstacle_locations = []
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
+
 def task_4_bottleneck():  ## It's scenario number will be 41 to read from scenario.txt
     room_side = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)  # 50 blocks = 10m
     corridor_length = int(500 / PEDESTRIAN_SIZE_SCENARIO_4)  # 25 blocks
-    corridor_width = int(100 / PEDESTRIAN_SIZE_SCENARIO_4)  # pedestrians are 20cm because we cannot represent 1m with 40cm blocks
+    corridor_width = int(
+        100 / PEDESTRIAN_SIZE_SCENARIO_4)  # pedestrians are 20cm because we cannot represent 1m with 40cm blocks
     near_corridor = int(450 / PEDESTRIAN_SIZE_SCENARIO_4)
     grid_length = room_side + room_side + corridor_length
     number_of_pedestrians = 150
@@ -161,7 +173,6 @@ def task_4_bottleneck():  ## It's scenario number will be 41 to read from scenar
     pedestrian_locations = []
     target_locations = []
     obstacle_locations = []
-
 
     # Place 150 pedestrians with uniform distribution
     loc_x = np.random.randint(low=0, high=room_side, size=number_of_pedestrians)
@@ -204,6 +215,7 @@ def task_4_bottleneck():  ## It's scenario number will be 41 to read from scenar
         target_locations.append((near_corridor + i, grid_length))
 
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
+
 
 def create_grid():
     # Get scenario number to create the grid

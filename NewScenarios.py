@@ -1,6 +1,9 @@
-import numpy as np
 import ast
+
+import numpy as np
+
 from Constant import *
+
 
 def read_setup_file():
     filename = "new_scenario.txt"
