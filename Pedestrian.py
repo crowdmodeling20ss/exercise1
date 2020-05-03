@@ -8,7 +8,8 @@ from Constant import *
 
 
 class Pedestrian:
-    def __init__(self, p_id, ca_model, grid_map, position, desired_speeds=None, corners=None, r_max=0, is_dijkstra_enabled=True):
+    def __init__(self, p_id, ca_model, grid_map, position, desired_speeds=None, corners=None, r_max=0,
+                 is_pedestrian_exit=True, is_dijkstra_enabled=True):
         """
         :param p_id: Pedestrian Id
         :param ca_model: CellularModel
@@ -26,6 +27,7 @@ class Pedestrian:
         self.size = self.get_size()  # This is to understand how many blocks does the ped. has in ints width/height
         self.r_max = r_max
         self.is_dijkstra_enabled = is_dijkstra_enabled
+        self.is_pedestrian_exit = is_pedestrian_exit
         self.p_state = P_INIT
         self.total_path = 0.0
         self.age = 0.0
@@ -103,7 +105,7 @@ class Pedestrian:
                         s = neighbour_costs[i]
                         b = i
 
-                if b!=-1:
+                if b != -1:
                     self.forward_multicell(b)
                 return
             best = self.calculate_interaction_cost_multicell(neighbour_costs)
@@ -140,9 +142,10 @@ class Pedestrian:
 
     def exit_multicell(self):
         self.p_state = P_EXIT
-        self.grid_map.set_state_block(self.corners, self.size, S_EMPTY)
-        print("Removed Pedestrian p_id:" + str(self.p_id) + " center:" + str(self.position))
-        self.ca_model.remove_pedestrian(self)
+        if self.is_pedestrian_exit:
+            self.grid_map.set_state_block(self.corners, self.size, S_EMPTY)
+            self.ca_model.remove_pedestrian(self)
+            print("Removed Pedestrian p_id:" + str(self.p_id) + " center:" + str(self.position))
 
     def pedestrian_end_check(self, n_costs):
         for i in n_costs:
@@ -178,7 +181,7 @@ class Pedestrian:
                 if r < self.r_max:
                     cost.append(np.exp(1 / (r ** 2 - self.r_max ** 2)))
         if len(cost) == 0: return 0
-        return sum(cost) / len(cost)*1.0
+        return sum(cost) / len(cost) * 1.0
 
     def threaded_interaction_cost_multicell_calculator(self, direction, neighbour_position):
         total_cost = 0
@@ -273,16 +276,17 @@ class Pedestrian:
     def calculate_distance_cost(self, neighbour_position):
         min_distance = math.inf
         ns = self.grid_map.get_target_positions()
-        nearest_row=math.inf
-        nearest_column=math.inf
+        nearest_row = math.inf
+        nearest_column = math.inf
         for t in ns:
-            if abs(t[0]-neighbour_position[0]) < nearest_row:
+            if abs(t[0] - neighbour_position[0]) < nearest_row:
                 nearest_row = t[0]
-            if abs(t[1]-neighbour_position[1]) < nearest_column:
+            if abs(t[1] - neighbour_position[1]) < nearest_column:
                 nearest_column = t[1]
         min_distance = np.linalg.norm(np.array([nearest_row, nearest_column]) - np.array(neighbour_position))
         # normalize
-        min_distance = (min_distance*1.0) / np.linalg.norm(np.array([0,0]) - np.array([len(self.grid_map.data)-1, len(self.grid_map.data[0])-1]))
+        min_distance = (min_distance * 1.0) / np.linalg.norm(
+            np.array([0, 0]) - np.array([len(self.grid_map.data) - 1, len(self.grid_map.data[0]) - 1]))
         ''' DO NOT CALCULATE NORM EACH TIME
         for t in self.grid_map.get_target_positions():
             distance = np.linalg.norm(np.array(t) - np.array(neighbour_position))

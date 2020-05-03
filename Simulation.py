@@ -191,7 +191,7 @@ def main():
     CONFIGURABLE_map_obj = Map(CONFIGURABLE_the_grid.grid.shape[0], CONFIGURABLE_the_grid.grid.shape[1],
                                CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners)
     show_cost_map(CONFIGURABLE_map_obj.cost_map, 5)
-    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj)
+    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, False)
     runSimulation(CONFIGURABLE_model)
     #"""
 
