@@ -191,18 +191,18 @@ def main():
     CONFIGURABLE_map_obj = Map(CONFIGURABLE_the_grid.grid.shape[0], CONFIGURABLE_the_grid.grid.shape[1],
                                CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners)
     show_cost_map(CONFIGURABLE_map_obj.cost_map, 5)
-    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, [[6,20],[12,20],[16,20],[16,20],[15.5,20],[15,20],[14,20],[13,20],[11,20],[7,20]]*5, True)
+    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj)
     runSimulation(CONFIGURABLE_model)
     #"""
 
 def saveToFile(path_pedestrians, velocity_pedestrians, time_tick):
-    f = open("tests/scenario-7/path_pedestrians.txt", "w")
+    f = open("path_pedestrians.txt", "w")
     f.write(str([path_pedestrians[g] for g in path_pedestrians]))
     f.close()
-    f = open("tests/scenario-7/velocity_pedestrians.txt", "w")
+    f = open("velocity_pedestrians.txt", "w")
     f.write(str([velocity_pedestrians[g] for g in velocity_pedestrians]))
     f.close()
-    f = open("tests/scenario-7/time_tick.txt", "w")
+    f = open("time_tick.txt", "w")
     f.write(str(time_tick))
     f.close()
 
