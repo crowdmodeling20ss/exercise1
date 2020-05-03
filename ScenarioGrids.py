@@ -152,8 +152,8 @@ def task_2():  # Scenario number: 2
 
 def task_3():  # Scenario number: 3
     grid_size = (50, 50)
-    pedestrian_locations = [(24, 4), (24, 44), (4, 24), (34, 35),
-                            (34, 13)]  # Creating pedestrians in almost circular around the target
+    pedestrian_locations = [(24, 11), (24, 37), (11, 24), (36, 19),
+                            (36, 29)]  # Creating pedestrians in almost circular around the target
     target_locations = [(24, 24)]
     obstacle_locations = []
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
@@ -238,7 +238,7 @@ def create_grid():
     scenario = 1
     for line in lines:
         lin = line.strip().split(" ")
-        scenario = int(lin[0].strip())
+        scenario = int(lin[0].strip( ))
         if scenario == 4 and len(lin) > 1:
             density = float(lin[2])
             if lin[1] == "1":

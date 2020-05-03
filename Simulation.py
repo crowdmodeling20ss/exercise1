@@ -190,7 +190,7 @@ def main():
     CONFIGURABLE_the_grid = GridCreator(CONFIGURABLE_grid, 1)
     CONFIGURABLE_map_obj = Map(CONFIGURABLE_the_grid.grid.shape[0], CONFIGURABLE_the_grid.grid.shape[1],
                                CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners)
-    show_cost_map(CONFIGURABLE_map_obj.cost_map, 5)
+    #show_cost_map(CONFIGURABLE_map_obj.cost_map, 5)
     CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, False)
     runSimulation(CONFIGURABLE_model)
     #"""
@@ -207,7 +207,7 @@ def saveToFile(path_pedestrians, velocity_pedestrians, time_tick):
     f.close()
 
 def runSimulation(ca_model, velocity_graph_enabled=True):
-    cmap = colors.ListedColormap(['white', 'red', 'Black', 'blue'])
+    cmap = colors.ListedColormap(['ghostwhite', 'mediumaquamarine', 'dimgrey', 'firebrick'])
     bounds = [0, 1, 2, 3, 4]
     norm = colors.BoundaryNorm(bounds, cmap.N)
 
@@ -223,7 +223,7 @@ def runSimulation(ca_model, velocity_graph_enabled=True):
     while simulation_boolean == True:
         plt.cla()
         plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
-        plt.pause(0.01)
+        plt.pause(5)
         start = time.time()
         ca_model.tick()
         done = time.time()
