@@ -4,6 +4,8 @@ import numpy as np
 
 from Constant import *
 
+from Simulation import *
+
 
 def read_setup_file():
     filename = "new_scenario.txt"
@@ -51,3 +53,17 @@ def create_grid_new_scenario():
         grid[loc] = S_OBSTACLE
 
     return grid
+
+
+def main():
+    ## New scenario from user
+    new_grid = create_grid_new_scenario()
+    new_the_grid = GridCreator(new_grid, 1)
+    new_map_obj = Map(new_the_grid.grid.shape[0], new_the_grid.grid.shape[1],
+                      new_the_grid.grid, new_the_grid.corners)
+    new_model = CellularModel(new_map_obj, [13, 20])
+    runSimulation(new_model)
+
+
+if __name__ == '__main__':
+    main()

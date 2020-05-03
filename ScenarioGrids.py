@@ -6,8 +6,7 @@ from Constant import *
     RiMEA scenarios
 '''
 
-
-def scenario_1():
+def scenario_1():  # Scenario number: 1
     # Corridor with 2m wide and 40m long
     width = int(200 / PEDESTRIAN_SIZE)  # as number of blocks, 5x40cm = 2m
     length = int(4000 / PEDESTRIAN_SIZE)  # as number of blocks, 100x40cm = 40m = 100
@@ -21,7 +20,7 @@ def scenario_1():
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
 
-def scenario_4(line_movement, density):
+def scenario_4(line_movement, density):  # Scenario number: 4
     # Corridor with 1000m long, 10m wide
     width = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks 50
     length = int(100000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks, 5000
@@ -66,7 +65,7 @@ def scenario_4(line_movement, density):
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
 
-def scenario_6():
+def scenario_6():  # Scenario number: 6
     width = int(200 / PEDESTRIAN_SIZE)  # as number of blocks
     side = int(1200 / PEDESTRIAN_SIZE)  # as number of blocks
     small_length = int(1000 / PEDESTRIAN_SIZE)  # as number of blocks
@@ -106,7 +105,7 @@ def scenario_6():
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
 
-def scenario_7():
+def scenario_7():  # Scenario number: 7
     width = int(SCENARIO_7_WIDTH * 100 / PEDESTRIAN_SIZE)  # as number of blocks
     length = int(SCENARIO_7_LENGTH * 100 / PEDESTRIAN_SIZE)  # as number of blocks
     grid_size = (width, length)
@@ -116,7 +115,7 @@ def scenario_7():
     pedestrian_locations = []
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_7 * 100) / PEDESTRIAN_SIZE)  # 25 blocks
 
-    # Place 20 pedestrian with uniform distribution
+    # Place 50 pedestrian with uniform distribution
     loc_x = np.random.randint(low=0, high=width, size=number_of_pedestrians)
     loc_y = np.random.randint(low=0, high=minimum_border_length, size=number_of_pedestrians)
     for k in range(number_of_pedestrians):
@@ -143,7 +142,7 @@ def scenario_7():
 '''
 
 
-def task_2():
+def task_2():  # Scenario number: 2
     grid_size = (50, 50)
     pedestrian_locations = [(24, 4)]
     target_locations = [(24, 24)]
@@ -151,7 +150,7 @@ def task_2():
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
 
-def task_3():
+def task_3():  # Scenario number: 3
     grid_size = (50, 50)
     pedestrian_locations = [(24, 4), (24, 44), (4, 24), (34, 35),
                             (34, 13)]  # Creating pedestrians in almost circular around the target
@@ -160,7 +159,7 @@ def task_3():
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
 
-def task_4_bottleneck():  ## It's scenario number will be 41 to read from scenario.txt
+def task_4_bottleneck():  # Scenario number: 41
     room_side = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)  # 50 blocks = 10m
     corridor_length = int(500 / PEDESTRIAN_SIZE_SCENARIO_4)  # 25 blocks
     corridor_width = int(
@@ -216,6 +215,19 @@ def task_4_bottleneck():  ## It's scenario number will be 41 to read from scenar
 
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
+def task_4_chicken_test():  # Scenario number: 42
+    grid_size = (50, 50)
+    pedestrian_locations = [(24, 0), (20, 0), (28, 0)]
+    target_locations = [(24, 49)]
+    obstacle_locations = []
+    for i in range(15, 35):
+        obstacle_locations.append((i, 35))
+    for j in range(15, 35):
+        obstacle_locations.append((15, j))
+        obstacle_locations.append((34, j))
+
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+
 
 def create_grid():
     # Get scenario number to create the grid
@@ -246,6 +258,8 @@ def create_grid():
         grid_size, pedestrian_locations, target_locations, obstacle_locations = task_3()
     elif scenario == 41:
         grid_size, pedestrian_locations, target_locations, obstacle_locations = task_4_bottleneck()
+    elif scenario == 42:
+        grid_size, pedestrian_locations, target_locations, obstacle_locations = task_4_chicken_test()
     else:
         return 0
 
