@@ -181,7 +181,7 @@ def main():
         [0, 2, 0, 0, 0],
         [0, 2, 0, 0, 0],
         [1, 2, 0, 0, 4]]), 1)
-    runSimulation(CellularModel(Map(10, 10, map1.grid, map1.corners)))
+    runSimulation(CellularModel(Map(10, 10, map1.grid, map1.corners)), True)
     """
 
     ## FILE CONFIGURABLE SCENARIO
@@ -190,20 +190,35 @@ def main():
     CONFIGURABLE_the_grid = GridCreator(CONFIGURABLE_grid, 1)
     CONFIGURABLE_map_obj = Map(CONFIGURABLE_the_grid.grid.shape[0], CONFIGURABLE_the_grid.grid.shape[1],
                                CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners)
-    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj)
+    show_cost_map(CONFIGURABLE_map_obj.cost_map, 5)
+    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, [[6,20],[12,20],[16,20],[16,20],[15.5,20],[15,20],[14,20],[13,20],[11,20],[7,20]]*5, True)
     runSimulation(CONFIGURABLE_model)
     #"""
 
+def saveToFile(path_pedestrians, velocity_pedestrians, time_tick):
+    f = open("tests/scenario-7/path_pedestrians.txt", "w")
+    f.write(str([path_pedestrians[g] for g in path_pedestrians]))
+    f.close()
+    f = open("tests/scenario-7/velocity_pedestrians.txt", "w")
+    f.write(str([velocity_pedestrians[g] for g in velocity_pedestrians]))
+    f.close()
+    f = open("tests/scenario-7/time_tick.txt", "w")
+    f.write(str(time_tick))
+    f.close()
 
-def runSimulation(ca_model, velocity_graph_enabled=False):
+def runSimulation(ca_model, velocity_graph_enabled=True):
     cmap = colors.ListedColormap(['white', 'red', 'Black', 'blue'])
     bounds = [0, 1, 2, 3, 4]
     norm = colors.BoundaryNorm(bounds, cmap.N)
 
     simulation_boolean = True
     time_tick = []
-    path_pedestrians = [[] for _ in range(len(ca_model.pedestrians))]
-    velocity_pedestrians = [[] for _ in range(len(ca_model.pedestrians))]
+    path_pedestrians = {}
+    velocity_pedestrians = {}
+    for p in ca_model.pedestrians:
+        path_pedestrians[p.p_id] = []
+        velocity_pedestrians[p.p_id] = []
+
     time_counter = 0
     while simulation_boolean == True:
         plt.cla()
@@ -217,19 +232,19 @@ def runSimulation(ca_model, velocity_graph_enabled=False):
 
         if velocity_graph_enabled:
             time_counter += 1
-            for i, p in enumerate(ca_model.pedestrians, start=0):
-                last_distance = 0 if len(path_pedestrians[i]) == 0 else path_pedestrians[i][time_counter - 2]
+            for p in ca_model.pedestrians:
+                last_distance = 0 if len(path_pedestrians[p.p_id]) == 0 else path_pedestrians[p.p_id][time_counter - 2]
                 last_position = np.array(p.visited_path[len(p.visited_path) - 2])
                 current_position = np.array(p.visited_path[len(p.visited_path) - 1])  # or p.position
                 distance = np.linalg.norm(current_position - last_position)
                 total_distance = last_distance + distance
 
-                path_pedestrians[i].append(total_distance)
-                velocity_pedestrians[i].append(distance)
+                path_pedestrians[p.p_id].append(total_distance)
+                velocity_pedestrians[p.p_id].append(distance)
 
             time_tick.append(time_counter)
 
-    if velocity_graph_enabled: show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick)
+    if velocity_graph_enabled: show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick, True)
 
 
 def show_cost_map(cost_map, duration):
@@ -241,7 +256,7 @@ def show_cost_map(cost_map, duration):
     plt.pause(duration)
 
 
-def show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick):
+def show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick, is_saved):
     t = len(time_tick)
     for i in range(len(path_pedestrians)):
         if (len(path_pedestrians[i]) < t):
@@ -250,10 +265,13 @@ def show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick):
             for _ in range(t - len(velocity_pedestrians[i])):
                 velocity_pedestrians[i] += [0]
 
+    if is_saved:
+        saveToFile(path_pedestrians, velocity_pedestrians, time_tick)
+
     plt.cla()
     for i in range(len(path_pedestrians)):
-        plt.plot(time_tick, velocity_pedestrians[i], label="Velocity")
-        # plt.plot(time_tick, path_pedestrians[i], label="Path")
+        #plt.plot(time_tick, velocity_pedestrians[i], label="V#"+str(i))
+        plt.plot(time_tick, path_pedestrians[i], label="P"+str(i))
     plt.xlabel('Time')
     plt.ylabel('Path')
     plt.title('Path/Time Pedestrian')
