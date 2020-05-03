@@ -163,7 +163,7 @@ def main():
 
     ## RIMEA_1
     """
-    rimea_1_grid = GridCreator(RIMEA_SCENARIO_1, 4)
+    rimea_1_grid = GridCreator(RIMEA_SCENARIO_1, 1)
     rimea_1_map = Map(10, 10, rimea_1_grid.grid, rimea_1_grid.corners)
     ## Single example
     single_speed = [13.3, 20]
@@ -177,7 +177,7 @@ def main():
     """
     map1 = GridCreator(np.array([
         [1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
+        [1, 1, 0, 0, 0],
         [0, 2, 0, 0, 0],
         [0, 2, 0, 0, 0],
         [1, 2, 0, 0, 4]]), 1)
@@ -185,12 +185,14 @@ def main():
     """
 
     ## FILE CONFIGURABLE SCENARIO
+    #"""
     CONFIGURABLE_grid = create_grid()
     CONFIGURABLE_the_grid = GridCreator(CONFIGURABLE_grid, 1)
     CONFIGURABLE_map_obj = Map(CONFIGURABLE_the_grid.grid.shape[0], CONFIGURABLE_the_grid.grid.shape[1],
                                CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners)
-    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, [13, 20])
+    CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj)
     runSimulation(CONFIGURABLE_model)
+    #"""
 
 
 def runSimulation(ca_model, velocity_graph_enabled=False):
@@ -204,14 +206,13 @@ def runSimulation(ca_model, velocity_graph_enabled=False):
     velocity_pedestrians = [[] for _ in range(len(ca_model.pedestrians))]
     time_counter = 0
     while simulation_boolean == True:
+        plt.cla()
+        plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
+        plt.pause(0.01)
         start = time.time()
         ca_model.tick()
         done = time.time()
         elapsed = done - start
-
-        plt.cla()
-        plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
-        plt.pause(0.01)
         simulation_boolean = ca_model.end_simulation()
 
         if velocity_graph_enabled:

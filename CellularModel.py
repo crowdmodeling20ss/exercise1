@@ -6,6 +6,7 @@ import Util
 from Constant import *
 from Map import Map
 from Pedestrian import Pedestrian
+import numpy as np
 
 
 class CellularModel:
@@ -41,7 +42,7 @@ class CellularModel:
             # print("R_max:", r_max)
             center = Util.calculate_center(corners)
             self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, center, self.get_pedestrian_speed(p_id),
-                                               self.grid_map.corners[p_id], r_max))
+                                               self.grid_map.corners[p_id], r_max, self.grid_map.is_dijkstra_enabled))
 
     def get_size(self):
         # print("Corners:", self.corners)

@@ -8,7 +8,7 @@ from Constant import *
 
 
 class Pedestrian:
-    def __init__(self, p_id, ca_model, grid_map, position, desired_speeds=None, corners=None, r_max=0):
+    def __init__(self, p_id, ca_model, grid_map, position, desired_speeds=None, corners=None, r_max=0, is_dijkstra_enabled=True):
         """
         :param p_id: Pedestrian Id
         :param ca_model: CellularModel
@@ -25,6 +25,7 @@ class Pedestrian:
         self.desired_speeds = desired_speeds if desired_speeds != None else self.get_initial_speeds()
         self.size = self.get_size()  # This is to understand how many blocks does the ped. has in ints width/height
         self.r_max = r_max
+        self.is_dijkstra_enabled = is_dijkstra_enabled
         self.p_state = P_INIT
         self.total_path = 0.0
         self.age = 0.0
@@ -86,36 +87,56 @@ class Pedestrian:
         ##The cost of -1 means that the neighbor of that side has a target
         ##The cost of -2 means that the neighbor of that side has a obstacle or ped. so we cant move there.
 
+        empty_neighbours = [n for n in neighbour_costs if [-1, -2].count(n) == 0]
+        if len(empty_neighbours) == 0:
+            return
+
         ##The interaction cost is not added yet.
         if self.pedestrian_end_check(neighbour_costs) == True:
             self.exit_multicell()
         else:
-            best = -1
-            cost = math.inf
-            normalization_var = np.amax(neighbour_costs) / 2 * 3
-            interaction_cost_tmp = []  # DEBUG PURPOSE
-            for i in range(4):  # check all sides
-                if neighbour_costs[i] != -2:
-                    # print("##################")
-                    # print("Direction:", i)
-                    # print("Cost before adding interaction_cost", neighbour_costs[i])
-                    # print("The Cost", self.interaction_cost_multicell(i))
-                    interaction_cost = self.interaction_cost_multicell(i)  # * normalization_var
-                    neighbour_costs[i] += interaction_cost
-                    interaction_cost_tmp.append(interaction_cost)  # DEBUG PURPOSE
-                    # print("Cost after adding interaction_cost", neighbour_costs[i])
+            if self.is_dijkstra_enabled == False:
+                s = math.inf
+                b = -1
+                for i in range(len(neighbour_costs)):
+                    if neighbour_costs[i] != -1 and neighbour_costs[i] != -2 and s > neighbour_costs[i]:
+                        s = neighbour_costs[i]
+                        b = i
 
-                    if cost > neighbour_costs[i]:
-                        cost = neighbour_costs[i]
-                        best = i
-                else:
-                    interaction_cost_tmp.append(0)  # DEBUG PURPOSE
-            self.interaction_cost_history.append(interaction_cost_tmp)  # DEBUG PURPOSE
+                if b!=-1:
+                    self.forward_multicell(b)
+                return
+            best = self.calculate_interaction_cost_multicell(neighbour_costs)
             if best != -1:  # There is a possible way
                 # if self.last_cost < cost:
                 #    return
                 # else:
                 self.forward_multicell(best)
+
+    def calculate_interaction_cost_multicell(self, neighbour_costs):
+        best = -1
+        cost = math.inf
+        normalization_var = np.amax(neighbour_costs) / 2 * 3
+        interaction_cost_tmp = []  # DEBUG PURPOSE
+        for i in range(4):  # check all sides
+            if neighbour_costs[i] != -2:
+                # print("##################")
+                # print("Direction:", i)
+                # print("Cost before adding interaction_cost", neighbour_costs[i])
+                # print("The Cost", self.interaction_cost_multicell(i))
+                interaction_cost = self.interaction_cost_multicell(i)  # * normalization_var
+                neighbour_costs[i] += interaction_cost
+                interaction_cost_tmp.append(interaction_cost)  # DEBUG PURPOSE
+                # print("Cost after adding interaction_cost", neighbour_costs[i])
+
+                if cost > neighbour_costs[i]:
+                    cost = neighbour_costs[i]
+                    best = i
+            else:
+                interaction_cost_tmp.append(0)  # DEBUG PURPOSE
+        self.interaction_cost_history.append(interaction_cost_tmp)  # DEBUG PURPOSE
+
+        return best
 
     def exit_multicell(self):
         self.p_state = P_EXIT
@@ -149,14 +170,15 @@ class Pedestrian:
         return cost
 
     def interaction_cost_multicell_calculator(self, neighbour_position):
-        total_cost = 0
+        cost = []
         for p in self.ca_model.pedestrians:
             if p != self:
                 center = p.position
                 r = np.linalg.norm(np.array(center) - np.array(neighbour_position))
                 if r < self.r_max:
-                    total_cost = np.exp(1 / (r ** 2 - self.r_max ** 2))
-        return total_cost
+                    cost.append(np.exp(1 / (r ** 2 - self.r_max ** 2)))
+        if len(cost) == 0: return 0
+        return sum(cost) / len(cost)*1.0
 
     def threaded_interaction_cost_multicell_calculator(self, direction, neighbour_position):
         total_cost = 0
@@ -250,10 +272,23 @@ class Pedestrian:
     # TODO: this can be received from Map.cost_map
     def calculate_distance_cost(self, neighbour_position):
         min_distance = math.inf
+        ns = self.grid_map.get_target_positions()
+        nearest_row=math.inf
+        nearest_column=math.inf
+        for t in ns:
+            if abs(t[0]-neighbour_position[0]) < nearest_row:
+                nearest_row = t[0]
+            if abs(t[1]-neighbour_position[1]) < nearest_column:
+                nearest_column = t[1]
+        min_distance = np.linalg.norm(np.array([nearest_row, nearest_column]) - np.array(neighbour_position))
+        # normalize
+        min_distance = (min_distance*1.0) / np.linalg.norm(np.array([0,0]) - np.array([len(self.grid_map.data)-1, len(self.grid_map.data[0])-1]))
+        ''' DO NOT CALCULATE NORM EACH TIME
         for t in self.grid_map.get_target_positions():
             distance = np.linalg.norm(np.array(t) - np.array(neighbour_position))
             if distance < min_distance:
                 min_distance = distance
+        '''
         return min_distance
 
     # TODO: Calculate interaction cost for each neighbour position to closest pedestrian or obstacle
