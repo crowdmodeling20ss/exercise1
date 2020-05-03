@@ -2,12 +2,12 @@
 import time
 
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib import colors
 
 from CellularModel import CellularModel
 from GridCreator import GridCreator
 from Map import Map
-from NewScenarios import *
 from ScenarioGrids import create_grid
 
 
@@ -211,7 +211,7 @@ def runSimulation(ca_model, velocity_graph_enabled=False):
 
         plt.cla()
         plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
-        plt.pause(0.01)
+        plt.pause(1)
         simulation_boolean = ca_model.end_simulation()
 
         if velocity_graph_enabled:

@@ -6,7 +6,6 @@ from Constant import *
     RiMEA scenarios
 '''
 
-
 def scenario_1():
     # Corridor with 2m wide and 40m long
     width = int(200 / PEDESTRIAN_SIZE)  # as number of blocks, 5x40cm = 2m
@@ -116,7 +115,7 @@ def scenario_7():
     pedestrian_locations = []
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_7 * 100) / PEDESTRIAN_SIZE)  # 25 blocks
 
-    # Place 20 pedestrian with uniform distribution
+    # Place 50 pedestrian with uniform distribution
     loc_x = np.random.randint(low=0, high=width, size=number_of_pedestrians)
     loc_y = np.random.randint(low=0, high=minimum_border_length, size=number_of_pedestrians)
     for k in range(number_of_pedestrians):
@@ -216,6 +215,19 @@ def task_4_bottleneck():  ## It's scenario number will be 41 to read from scenar
 
     return grid_size, pedestrian_locations, target_locations, obstacle_locations
 
+def task_4_chicken_test():
+    grid_size = (50, 50)
+    pedestrian_locations = [(24, 0), (20, 0), (28, 0)]
+    target_locations = [(24, 49)]
+    obstacle_locations = []
+    for i in range(15, 35):
+        obstacle_locations.append((i, 35))
+    for j in range(15, 35):
+        obstacle_locations.append((15, j))
+        obstacle_locations.append((34, j))
+
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+
 
 def create_grid():
     # Get scenario number to create the grid
@@ -246,6 +258,8 @@ def create_grid():
         grid_size, pedestrian_locations, target_locations, obstacle_locations = task_3()
     elif scenario == 41:
         grid_size, pedestrian_locations, target_locations, obstacle_locations = task_4_bottleneck()
+    elif scenario == 42:
+        grid_size, pedestrian_locations, target_locations, obstacle_locations = task_4_chicken_test()
     else:
         return 0
 
