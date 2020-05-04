@@ -101,8 +101,10 @@ class Pedestrian:
                 s = math.inf
                 b = -1
                 for i in range(len(neighbour_costs)):
-                    if neighbour_costs[i] != -1 and neighbour_costs[i] != -2 and s > neighbour_costs[i]:
-                        s = neighbour_costs[i]
+                    interaction_value = self.interaction_cost_multicell(i)
+                    if neighbour_costs[i] != -1 and neighbour_costs[i] != -2 and s > (neighbour_costs[i] + interaction_value):
+                        
+                        s = neighbour_costs[i] + interaction_value
                         b = i
 
                 if b != -1:
