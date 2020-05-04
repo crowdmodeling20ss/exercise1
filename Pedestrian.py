@@ -103,12 +103,15 @@ class Pedestrian:
             if self.is_dijkstra_enabled == False:
                 s = math.inf
                 b = -1
+                i_costs = []
                 for i in range(len(neighbour_costs)):
                     interaction_value = self.interaction_cost_multicell(i)
+                    i_costs.append(interaction_value)
                     if neighbour_costs[i] != -1 and neighbour_costs[i] != -2 and s > (neighbour_costs[i] + interaction_value):
                         
                         s = neighbour_costs[i] + interaction_value
                         b = i
+                self.interaction_cost_history.append(i_costs)
 
                 if b != -1:
                     self.forward_multicell(b)

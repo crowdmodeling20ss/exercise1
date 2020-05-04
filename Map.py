@@ -171,6 +171,7 @@ class Map:
 
     def ddd(self, direction, corners, size):
         direction_cost = 0
+        direction_cost_size = 0
         if direction == D_TOP:
             if 0 <= (corners[0][0] - 1) < len(self.data):
                 for i in range(size):
@@ -185,7 +186,8 @@ class Map:
                         # Check if break works:
                     else:
                         direction_cost += self.calculate_distance_cost([corners[0][0] - 1, corners[0][1] + i])
-                return direction_cost / 4.0
+                        direction_cost_size += 1
+                return direction_cost / float(direction_cost_size)
             else:
                 direction_cost = -2  # invalid neighbour
                 return direction_cost
@@ -203,7 +205,8 @@ class Map:
 
                     else:
                         direction_cost += self.calculate_distance_cost([corners[1][0] + i, corners[1][1] + 1])
-                return direction_cost / 4.0
+                        direction_cost_size += 1
+                return direction_cost / float(direction_cost_size)
             else:
                 direction_cost = -2  # invalid neighbour
                 return direction_cost
@@ -221,7 +224,8 @@ class Map:
                         return direction_cost
                     else:
                         direction_cost += self.calculate_distance_cost([corners[2][0] + 1, corners[2][1] + i])
-                return direction_cost / 4.0
+                        direction_cost_size += 1
+                return direction_cost / float(direction_cost_size)
             else:
                 direction_cost = -2  # invalid neighbour
                 return direction_cost
@@ -239,7 +243,8 @@ class Map:
                         return direction_cost
                     else:
                         direction_cost += self.calculate_distance_cost([corners[0][0] + i, corners[0][1] - 1])
-                return direction_cost / 4.0
+                        direction_cost_size += 1
+                return direction_cost / float(direction_cost_size)
             else:
                 direction_cost = -2  # invalid neighbour
                 return direction_cost
@@ -288,6 +293,7 @@ class Map:
 
     def calculate_distance_cost(self, neighbour_position):
         min_distance = math.inf
+        """
         ns = self.get_target_positions()
         nearest_row=math.inf
         nearest_column=math.inf
@@ -299,10 +305,13 @@ class Map:
         min_distance = np.linalg.norm(np.array([nearest_row, nearest_column]) - np.array(neighbour_position))
         # normalize
         min_distance = (min_distance*1.0) / np.linalg.norm(np.array([0,0]) - np.array([0, len(self.data[0])-1]))
-        ''' DO NOT CALCULATE NORM EACH TIME
-        for t in self.grid_map.get_target_positions():
+        """
+
+        #''' DO NOT CALCULATE NORM EACH TIME
+        for t in self.get_target_positions():
             distance = np.linalg.norm(np.array(t) - np.array(neighbour_position))
             if distance < min_distance:
                 min_distance = distance
-        '''
+        #'''
+        min_distance = (min_distance * 1.0) / np.linalg.norm(np.array([0, 0]) - np.array([0, len(self.data[0]) - 1]))
         return min_distance
