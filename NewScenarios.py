@@ -4,6 +4,7 @@ from Constant import *
 from CellularModel import CellularModel
 from GridCreator import GridCreator
 from Map import Map
+from PredefinedSimulation import PredefinedSimulation
 from Simulation import Simulation
 
 def read_setup_file():
