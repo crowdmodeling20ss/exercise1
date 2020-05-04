@@ -146,7 +146,7 @@ class Map:
             return self.neighbour_check_left(corners, size)
 
     ##TODO: MULTICELL GET NEIGHBOR WITH COST
-    def get_neighbours_multicell(self, corners, size):
+    def get_neighbours_multicell(self, corners, size, obstacle_avoidance_enabled):
         direction_cost = [0, 0, 0, 0]  # costs for top, right, bottom, left direction
 
         if self.is_dijkstra_enabled:
@@ -165,11 +165,11 @@ class Map:
             return direction_cost
         else:
             for direction in range(4):
-                direction_cost[direction] = self.ddd(direction, corners, size)
+                direction_cost[direction] = self.ddd(direction, corners, size, obstacle_avoidance_enabled)
 
             return direction_cost
 
-    def ddd(self, direction, corners, size):
+    def ddd(self, direction, corners, size, obstacle_avoidance_enabled):
         direction_cost = 0
         direction_cost_size = 0
         if direction == D_TOP:
@@ -180,7 +180,7 @@ class Map:
                         direction_cost = -1
                         return direction_cost
                         ##EXIT FUNCTION, found the target
-                    elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    elif obstacle_avoidance_enabled and (curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN):
                         direction_cost = -2  # invalid neighbour
                         return direction_cost
                         # Check if break works:
@@ -199,7 +199,7 @@ class Map:
                         direction_cost = -1
                         return direction_cost
                         ##EXIT FUNCTION, found the target
-                    elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    elif obstacle_avoidance_enabled and (curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN):
                         direction_cost = -2  # invalid neighbour
                         return direction_cost
 
@@ -218,7 +218,7 @@ class Map:
                         direction_cost = -1
                         return direction_cost
                         ##EXIT FUNCTION, found the target
-                    elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    elif obstacle_avoidance_enabled and (curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN):
                         direction_cost = -2  # invalid neighbour
                         # Check if break works:
                         return direction_cost
@@ -237,7 +237,7 @@ class Map:
                         direction_cost = -1
                         return direction_cost
                         ##EXIT FUNCTION, found the target
-                    elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    elif obstacle_avoidance_enabled and (curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN):
                         direction_cost = -2  # invalid neighbour
                         # Check if break works:
                         return direction_cost

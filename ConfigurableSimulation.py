@@ -22,5 +22,5 @@ class ConfigurableSimulation(Simulation):
             self.show_cost_map(CONFIGURABLE_map_obj.cost_map, 5)
 
         CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, self.IS_PEDESTRIAN_EXIT, self.SPEED_OF_PEDESTRIANS,
-                                           self.SPEED_PER_PEDESTRIAN_IS_ON)
+                                           self.SPEED_PER_PEDESTRIAN_IS_ON, self.OBSTACLE_AVOIDANCE_ENABLED)
         self.runSimulation(CONFIGURABLE_model, self.SHOW_SPEED_GRAPH)

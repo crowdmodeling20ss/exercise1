@@ -9,7 +9,7 @@ from Constant import *
 
 class Pedestrian:
     def __init__(self, p_id, ca_model, grid_map, position, desired_speeds=None, corners=None, r_max=0,
-                 is_pedestrian_exit=True, is_dijkstra_enabled=True):
+                 is_pedestrian_exit=True, is_dijkstra_enabled=True, obstacle_avoidance_enabled=True):
         """
         :param p_id: Pedestrian Id
         :param ca_model: CellularModel
@@ -35,6 +35,7 @@ class Pedestrian:
         self.path_cost_history = []
         self.distance_cost_history = []
         self.interaction_cost_history = []
+        self.obstacle_avoidance_enabled = obstacle_avoidance_enabled
         # self.last_cost = math.inf
 
     def get_size(self):
@@ -86,13 +87,14 @@ class Pedestrian:
     def get_best_next_position_Multicell(self):
         # print("get best next position size", self.size)
 
-        neighbour_costs = self.grid_map.get_neighbours_multicell(self.corners, self.size)
+        neighbour_costs = self.grid_map.get_neighbours_multicell(self.corners, self.size, self.obstacle_avoidance_enabled)
         self.distance_cost_history.append(neighbour_costs.copy())
         ## we will get a vector with costs of [top, right, bottom. left]
         ##The cost of -1 means that the neighbor of that side has a target
         ##The cost of -2 means that the neighbor of that side has a obstacle or ped. so we cant move there.
 
-        empty_neighbours = [n for n in neighbour_costs if [-1, -2].count(n) == 0]
+        e_cells = [-1, -2] if self.obstacle_avoidance_enabled else [-1]
+        empty_neighbours = [n for n in neighbour_costs if e_cells.count(n) == 0]
         if len(empty_neighbours) == 0:
             return
 
