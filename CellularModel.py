@@ -18,6 +18,7 @@ class CellularModel:
 
     def __init__(self, grid_map, is_pedestrian_exit=True, speeds=None, speed_per_pedestrian=False):
         self.pedestrians = []
+        print("speed per pedestrian", speed_per_pedestrian)
         self.speeds = speeds if speed_per_pedestrian else [speeds]
         self.speed_per_pedestrian = speed_per_pedestrian
         self.is_pedestrian_exit = is_pedestrian_exit

@@ -14,10 +14,12 @@ def scenario_1():  # Scenario number: 1
     pedestrian_locations = [(2, 0)]  # halfway
     obstacle_locations = []
     target_locations = []
+    is_dijkstra = True
+    is_exit = True
     for i in range(0, width):
         target_locations.append((i, length - 1))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
 
 
 def scenario_4(line_movement, density):  # Scenario number: 4
@@ -30,6 +32,8 @@ def scenario_4(line_movement, density):  # Scenario number: 4
     number_of_pedestrians = int(10 * 1000 * density)
     # as number of blocks, 2000 block is 400 meters, all pedestrians will be distributed before the first measuring point
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_4 * 100) / PEDESTRIAN_SIZE_SCENARIO_4)
+    is_dijkstra = True
+    is_exit = True
 
     if line_movement == "true":
         width = SCENARIO_4_LINES
@@ -62,7 +66,7 @@ def scenario_4(line_movement, density):  # Scenario number: 4
     for i in range(0, width):
         target_locations.append((i, length - 1))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
 
 
 def scenario_6():  # Scenario number: 6
@@ -75,6 +79,8 @@ def scenario_6():  # Scenario number: 6
     obstacle_locations = []
     target_locations = []
     number_of_pedestrians = 20
+    is_dijkstra = True
+    is_exit = True
 
     # Place 20 pedestrian with uniform distribution
     loc_x = np.random.randint(low=side - width, high=side, size=number_of_pedestrians)
@@ -102,7 +108,7 @@ def scenario_6():  # Scenario number: 6
     for i in range(small_length, side):
         target_locations.append((0, i))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
 
 
 def scenario_7():  # Scenario number: 7
@@ -114,6 +120,8 @@ def scenario_7():  # Scenario number: 7
     target_locations = []
     pedestrian_locations = []
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_7 * 100) / PEDESTRIAN_SIZE)  # 25 blocks
+    is_dijkstra = True
+    is_exit = True
 
     # Place 50 pedestrian with uniform distribution
     loc_x = np.random.randint(low=0, high=width, size=number_of_pedestrians)
@@ -134,7 +142,7 @@ def scenario_7():  # Scenario number: 7
     for i in range(1, width):
         target_locations.append((i, length - 1))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
 
 
 '''
@@ -147,7 +155,9 @@ def task_2():  # Scenario number: 2
     pedestrian_locations = [(24, 4)]
     target_locations = [(24, 24)]
     obstacle_locations = []
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+    is_dijkstra = False
+    is_exit = False
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
 
 
 def task_3():  # Scenario number: 3
@@ -156,7 +166,9 @@ def task_3():  # Scenario number: 3
                             (36, 29)]  # Creating pedestrians in almost circular around the target
     target_locations = [(24, 24)]
     obstacle_locations = []
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+    is_dijkstra = False
+    is_exit = False
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
 
 
 def task_4_bottleneck():  # Scenario number: 41
@@ -172,6 +184,8 @@ def task_4_bottleneck():  # Scenario number: 41
     pedestrian_locations = []
     target_locations = []
     obstacle_locations = []
+    is_dijkstra = False
+    is_exit = True
 
     # Place 150 pedestrians with uniform distribution
     loc_x = np.random.randint(low=0, high=room_side, size=number_of_pedestrians)
@@ -213,20 +227,22 @@ def task_4_bottleneck():  # Scenario number: 41
     for i in range(corridor_width + 1):
         target_locations.append((near_corridor + i, grid_length))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
 
 def task_4_chicken_test():  # Scenario number: 42
     grid_size = (50, 50)
     pedestrian_locations = [(24, 0), (20, 0), (28, 0)]
     target_locations = [(24, 49)]
     obstacle_locations = []
+    is_dijkstra = False
+    is_exit = True
     for i in range(15, 35):
         obstacle_locations.append((i, 35))
     for j in range(15, 35):
         obstacle_locations.append((15, j))
         obstacle_locations.append((34, j))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
 
 
 def create_grid():
@@ -236,6 +252,9 @@ def create_grid():
     line_movement = False
     density = 1
     scenario = 1
+    is_dijkstra_4 = False
+    is_exit = False
+    is_dijkstra = False
     for line in lines:
         lin = line.strip().split(" ")
         scenario = int(lin[0].strip( ))
@@ -243,23 +262,29 @@ def create_grid():
             density = float(lin[2])
             if lin[1] == "1":
                 line_movement = True
+        elif (scenario == 41 or scenario == 42) and len(lin) > 1:
+            if lin[1] == "1":
+                is_dijkstra_4 = True
+
 
     if scenario == 1:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations = scenario_1()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = scenario_1()
     elif scenario == 4:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations = scenario_4(line_movement, density)
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = scenario_4(line_movement, density)
     elif scenario == 6:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations = scenario_6()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = scenario_6()
     elif scenario == 7:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations = scenario_7()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = scenario_7()
     elif scenario == 2:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations = task_2()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = task_2()
     elif scenario == 3:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations = task_3()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = task_3()
     elif scenario == 41:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations = task_4_bottleneck()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = task_4_bottleneck()
+        is_dijkstra = is_dijkstra_4
     elif scenario == 42:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations = task_4_chicken_test()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = task_4_chicken_test()
+        is_dijkstra = is_dijkstra_4
     else:
         return 0
 
@@ -273,4 +298,4 @@ def create_grid():
     for loc in obstacle_locations:
         grid[loc] = S_OBSTACLE
 
-    return grid
+    return grid, is_dijkstra, is_exit

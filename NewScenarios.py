@@ -1,11 +1,10 @@
 import ast
-
 import numpy as np
-
 from Constant import *
-
-from Simulation import *
-
+from CellularModel import CellularModel
+from GridCreator import GridCreator
+from Map import Map
+from Simulation import Simulation
 
 def read_setup_file():
     filename = "new_scenario.txt"
@@ -13,6 +12,7 @@ def read_setup_file():
     target_locations = []
     obstacle_locations = []
     grid_size = ()
+    is_dijkstra = False
 
     f = open(filename, "r")
     lines = f.readlines()
@@ -21,11 +21,14 @@ def read_setup_file():
     pedestrian = "Pedestrian"
     obstacle = "Obstacle"
     target = "Target"
+    dijkstra = "Dijkstra"
+
+    # TODO: add speed
 
     for line in lines:
         setup = line.strip().split("=")
         setup[0] = setup[0].strip().lower()
-        setup[1] = setup[1].strip()
+        setup[1] = setup[1].strip().capitalize()
         obj = ast.literal_eval(setup[1])
 
         if setup[0] == grid_name.lower():
@@ -36,13 +39,16 @@ def read_setup_file():
             target_locations = obj
         elif setup[0] == obstacle.lower():
             obstacle_locations = obj
+        elif setup[0] == dijkstra.lower():
+            is_dijkstra = obj
+
 
     f.close()
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra
 
 
 def create_grid_new_scenario():
-    grid_size, pedestrian_locations, target_locations, obstacle_locations = read_setup_file()
+    grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra_enabled = read_setup_file()
     grid = np.zeros(grid_size)
 
     for loc in pedestrian_locations:
@@ -52,18 +58,25 @@ def create_grid_new_scenario():
     for loc in obstacle_locations:
         grid[loc] = S_OBSTACLE
 
-    return grid
+    return grid, is_dijkstra_enabled
 
 
 def main():
     ## New scenario from user
-    new_grid = create_grid_new_scenario()
-    new_the_grid = GridCreator(new_grid, 1)
-    new_map_obj = Map(new_the_grid.grid.shape[0], new_the_grid.grid.shape[1],
-                      new_the_grid.grid, new_the_grid.corners)
-    new_model = CellularModel(new_map_obj, [13, 20])
-    runSimulation(new_model)
+    IS_DIJKSTRA_ENABLED = True
+    IS_PEDESTRIAN_EXIT = True
+    SPEED_OF_PEDESTRIANS = [1, 20]
+    SPEED_PER_PEDESTRIAN_IS_ON = False
+    SHOW_COST_MAP = True
+    SHOW_SPEED_GRAPH = True
 
+    predefinedSimulation = PredefinedSimulation(IS_DIJKSTRA_ENABLED,
+                                                IS_PEDESTRIAN_EXIT,
+                                                SPEED_OF_PEDESTRIANS,
+                                                SPEED_PER_PEDESTRIAN_IS_ON,
+                                                SHOW_COST_MAP,
+                                                SHOW_SPEED_GRAPH)
+    predefinedSimulation.run()
 
 if __name__ == '__main__':
     main()

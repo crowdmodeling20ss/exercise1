@@ -1,4 +1,5 @@
 Grid Size = (5,5)
-Pedestrian = [(3,4),(0,1)]
+Pedestrian = [(3,4),(0,1),(2,2)]
 Target = [(4,4)]
 Obstacle = [(1,0)]
+Dijkstra = false

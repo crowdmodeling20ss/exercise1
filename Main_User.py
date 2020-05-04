@@ -2,14 +2,14 @@ from PredefinedSimulation import PredefinedSimulation
 
 
 def main():
-    print("main")
+    print("main_user")
     IS_DIJKSTRA_ENABLED = True
     IS_PEDESTRIAN_EXIT = True
     SPEED_OF_PEDESTRIANS = [1, 20]
     SPEED_PER_PEDESTRIAN_IS_ON = False
     SHOW_COST_MAP = True
     SHOW_SPEED_GRAPH = True
-    IS_USER_DEFINED = False
+    IS_USER_DEFINED = True
 
     predefinedSimulation = PredefinedSimulation(IS_DIJKSTRA_ENABLED,
                                                 IS_PEDESTRIAN_EXIT,
