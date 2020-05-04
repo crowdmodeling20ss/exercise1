@@ -60,6 +60,9 @@ class Pedestrian:
         while self.p_state != P_EXIT and self.velocity() < self.desired_speeds[0]:
             previous_position = np.array(self.position)
             self.get_best_next_position_Multicell()
+            if (len(self.distance_cost_history) > 0 and self.distance_cost_history[len(self.distance_cost_history) - 1] == [-2, -2, -2, -2]):
+                print("Stuck case. # Ped:" + str(self.p_id))
+                break
             distance = np.linalg.norm(np.array(self.position) - previous_position)
             self.total_path += distance
 
