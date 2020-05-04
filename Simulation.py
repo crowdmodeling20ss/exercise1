@@ -88,7 +88,10 @@ class Simulation(ABC):
         for i in range(len(path_pedestrians)):
             if (len(path_pedestrians[i]) < t):
                 for _ in range(t - len(path_pedestrians[i])):
-                    path_pedestrians[i] += [path_pedestrians[i][len(path_pedestrians[i]) - 1]]
+                    try:
+                        path_pedestrians[i] += [path_pedestrians[i][len(path_pedestrians[i]) - 1]]
+                    except:
+                        path_pedestrians[i] += [0]
                 for _ in range(t - len(velocity_pedestrians[i])):
                     velocity_pedestrians[i] += [0]
 

@@ -5,7 +5,7 @@ def main():
     print("main")
     IS_DIJKSTRA_ENABLED = True
     IS_PEDESTRIAN_EXIT = True
-    SPEED_OF_PEDESTRIANS = [1, 20]
+    SPEED_OF_PEDESTRIANS = [5, 20]
     SPEED_PER_PEDESTRIAN_IS_ON = False
     SHOW_COST_MAP = True
     SHOW_SPEED_GRAPH = True
