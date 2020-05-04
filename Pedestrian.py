@@ -134,9 +134,9 @@ class Pedestrian:
                 # print("Direction:", i)
                 # print("Cost before adding interaction_cost", neighbour_costs[i])
                 # print("The Cost", self.interaction_cost_multicell(i))
-                interaction_cost = self.interaction_cost_multicell(i)  # * normalization_var
-                neighbour_costs[i] += interaction_cost
-                interaction_cost_tmp.append(interaction_cost)  # DEBUG PURPOSE
+                #interaction_cost = self.interaction_cost_multicell(i)  # * normalization_var
+                #neighbour_costs[i] += interaction_cost
+                #interaction_cost_tmp.append(interaction_cost)  # DEBUG PURPOSE
                 # print("Cost after adding interaction_cost", neighbour_costs[i])
 
                 if cost > neighbour_costs[i]:
@@ -151,7 +151,7 @@ class Pedestrian:
     def exit_multicell(self):
         self.p_state = P_EXIT
         if self.is_pedestrian_exit:
-            self.grid_map.set_state_block(self.corners, self.size, S_EMPTY)
+            self.grid_map.set_state_block(self.corners, self.size, S_EMPTY2)
             self.ca_model.remove_pedestrian(self)
             print("Removed Pedestrian p_id:" + str(self.p_id) + " center:" + str(self.position))
 
@@ -224,14 +224,14 @@ class Pedestrian:
         #####UPDATE CORNERS: 
         if direction == D_TOP:  # row -1
             self.grid_map.set_state_multicell(self.corners[2], D_BOTTOM, self.size,
-                                              S_EMPTY)  # Empty the existing cells that move
+                                              S_EMPTY2)  # Empty the existing cells that move
             self.grid_map.set_state_multicell([self.corners[0][0] - 1, self.corners[0][1]], D_TOP, self.size,
                                               S_PEDESTRIAN)
             for i in range(4):
                 self.corners[i] = [self.corners[i][0] - 1, self.corners[i][1]]
         elif direction == D_RIGHT:  # column +1
             self.grid_map.set_state_multicell(self.corners[0], D_LEFT, self.size,
-                                              S_EMPTY)  # Empty the existing cells that move
+                                              S_EMPTY2)  # Empty the existing cells that move
             self.grid_map.set_state_multicell([self.corners[1][0], self.corners[1][1] + 1], D_RIGHT, self.size,
                                               S_PEDESTRIAN)
             for i in range(4):
@@ -239,14 +239,14 @@ class Pedestrian:
                 self.corners[i] = [self.corners[i][0], self.corners[i][1] + 1]
         elif direction == D_BOTTOM:  # row +1
             self.grid_map.set_state_multicell(self.corners[0], D_TOP, self.size,
-                                              S_EMPTY)  # Empty the existing cells that move
+                                              S_EMPTY2)  # Empty the existing cells that move
             self.grid_map.set_state_multicell([self.corners[2][0] + 1, self.corners[2][1]], D_BOTTOM, self.size,
                                               S_PEDESTRIAN)
             for i in range(4):
                 self.corners[i] = [self.corners[i][0] + 1, self.corners[i][1]]
         elif direction == D_LEFT:  # column -1
             self.grid_map.set_state_multicell(self.corners[1], D_RIGHT, self.size,
-                                              S_EMPTY)  # Empty the existing cells that move
+                                              S_EMPTY2)  # Empty the existing cells that move
             self.grid_map.set_state_multicell([self.corners[0][0], self.corners[0][1] - 1], D_LEFT, self.size,
                                               S_PEDESTRIAN)
             for i in range(4):
@@ -258,7 +258,7 @@ class Pedestrian:
 
     def get_best_next_position(self, Dijkstra_boolean=0):
         neighbours = self.grid_map.get_neighbours(self.position)
-        empty_neighbours = [n for n in neighbours if [S_EMPTY, S_TARGET].count(self.grid_map.get_state(n))]
+        empty_neighbours = [n for n in neighbours if [S_EMPTY, S_EMPTY2, S_TARGET].count(self.grid_map.get_state(n))]
         if len(empty_neighbours) == 0:
             # print("self.position:" + str(self.position) + str(neighbours) + str(empty_neighbours))
             # print("MAP")

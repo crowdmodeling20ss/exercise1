@@ -252,11 +252,6 @@ class Map:
     def set_state_multicell(self, pos, direction, size, block_type):  # to change a row or column
         cell_x = pos[0]
         cell_y = pos[1]
-        # print("CELL X", cell_x)
-        # print("CELL Y", cell_y)
-        # print("Direction", direction)
-        # print("size", size)
-        # print("block type", block_type)
         if direction == D_TOP:  # top
             for i in range(size):
                 self.data[cell_x][cell_y + i] = block_type
@@ -267,8 +262,6 @@ class Map:
             for i in range(size):
                 self.data[cell_x][cell_y + i] = block_type
         elif direction == D_LEFT:
-            # print("size", size)
-            # print("pos", pos)
             for i in range(size):
                 self.data[cell_x + i][cell_y] = block_type
 
