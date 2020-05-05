@@ -22,7 +22,7 @@ class Simulation(ABC):
         print("Simulation(ABC).run(self)")
 
     def runSimulation(self, ca_model, velocity_graph_enabled=True):
-        cmap = colors.ListedColormap(['ghostwhite', 'mediumaquamarine', 'dimgrey', 'firebrick'])
+        cmap = colors.ListedColormap(['ghostwhite', 'Khaki', 'mediumaquamarine', 'firebrick'])
         bounds = [0, 1, 2, 3, 4]
         norm = colors.BoundaryNorm(bounds, cmap.N)
 
