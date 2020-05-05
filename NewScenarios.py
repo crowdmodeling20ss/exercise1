@@ -14,6 +14,7 @@ def read_setup_file():
     obstacle_locations = []
     grid_size = ()
     is_dijkstra = False
+    speed_arr = []
 
     f = open(filename, "r")
     lines = f.readlines()
@@ -23,6 +24,7 @@ def read_setup_file():
     obstacle = "Obstacle"
     target = "Target"
     dijkstra = "Dijkstra"
+    speed = "Speed"    # Scale variable not added
 
     # TODO: add speed
 
@@ -42,16 +44,19 @@ def read_setup_file():
             obstacle_locations = obj
         elif setup[0] == dijkstra.lower():
             is_dijkstra = obj
+        elif setup[0] == speed.lower():
+            speed_arr = obj
 
 
     f.close()
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, speed_arr
 
 
 def create_grid_new_scenario():
-    grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra_enabled = read_setup_file()
+    grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra_enabled, speed_arr = read_setup_file()
     grid = np.zeros(grid_size)
-
+    num_pedestrian = len(pedestrian_locations)
+    print("num pedestrian: ", num_pedestrian)
     for loc in pedestrian_locations:
         grid[loc] = S_PEDESTRIAN
     for loc in target_locations:
@@ -59,9 +64,9 @@ def create_grid_new_scenario():
     for loc in obstacle_locations:
         grid[loc] = S_OBSTACLE
 
-    return grid, is_dijkstra_enabled
+    return grid, is_dijkstra_enabled, speed_arr, num_pedestrian
 
-
+'''
 def main():
     ## New scenario from user
     IS_DIJKSTRA_ENABLED = True
@@ -81,3 +86,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+'''

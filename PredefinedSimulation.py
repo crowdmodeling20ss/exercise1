@@ -10,8 +10,6 @@ class PredefinedSimulation(Simulation):
     def run(self):
         self._is_running = True
         CONFIGURABLE_grid, is_dijkstra_enabled, is_pedestrian_exit, speed, scale_var = create_grid()
-        print("is dijkstra enabled ", is_dijkstra_enabled)
-        print("is_pedestrian_exit ", is_pedestrian_exit)
         self.IS_DIJKSTRA_ENABLED = is_dijkstra_enabled
         self.SHOW_COST_MAP = is_dijkstra_enabled
         self.IS_PEDESTRIAN_EXIT = is_pedestrian_exit
