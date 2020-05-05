@@ -17,7 +17,7 @@ def scenario_1():  # Scenario number: 1
     is_dijkstra = True
     is_exit = True
     speed = [[13, 20]]
-    scale_var = 1
+    scale_var = 4
 
     for i in range(0, width):
         target_locations.append((i, length - 1))
@@ -87,7 +87,7 @@ def scenario_6():  # Scenario number: 6
     is_dijkstra = True
     is_exit = True
     speed = [[13, 20]]
-    scale_var = 1
+    scale_var = 4
 
     # Place 20 pedestrian with uniform distribution
     loc_x = np.random.randint(low=side - width, high=side, size=number_of_pedestrians)
