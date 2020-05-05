@@ -16,10 +16,13 @@ def scenario_1():  # Scenario number: 1
     target_locations = []
     is_dijkstra = True
     is_exit = True
+    speed = [[13, 20]]
+    scale_var = 1
+
     for i in range(0, width):
         target_locations.append((i, length - 1))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
 
 def scenario_4(line_movement, density):  # Scenario number: 4
@@ -34,6 +37,8 @@ def scenario_4(line_movement, density):  # Scenario number: 4
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_4 * 100) / PEDESTRIAN_SIZE_SCENARIO_4)
     is_dijkstra = True
     is_exit = True
+    speed = [[13, 20]]
+    scale_var = 1 #4
 
     if line_movement == "true":
         width = SCENARIO_4_LINES
@@ -66,7 +71,7 @@ def scenario_4(line_movement, density):  # Scenario number: 4
     for i in range(0, width):
         target_locations.append((i, length - 1))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
 
 def scenario_6():  # Scenario number: 6
@@ -81,6 +86,8 @@ def scenario_6():  # Scenario number: 6
     number_of_pedestrians = 20
     is_dijkstra = True
     is_exit = True
+    speed = [[13, 20]]
+    scale_var = 1
 
     # Place 20 pedestrian with uniform distribution
     loc_x = np.random.randint(low=side - width, high=side, size=number_of_pedestrians)
@@ -108,7 +115,7 @@ def scenario_6():  # Scenario number: 6
     for i in range(small_length, side):
         target_locations.append((0, i))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
 
 def scenario_7():  # Scenario number: 7
@@ -122,6 +129,8 @@ def scenario_7():  # Scenario number: 7
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_7 * 100) / PEDESTRIAN_SIZE)  # 25 blocks
     is_dijkstra = True
     is_exit = True
+    speed = [[6,20],[12,20],[16,20],[16,20],[15.5,20],[15,20],[14,20],[13,20],[11,20],[7,20]]*5
+    scale_var = 1
 
     # Place 50 pedestrian with uniform distribution
     loc_x = np.random.randint(low=0, high=width, size=number_of_pedestrians)
@@ -142,7 +151,7 @@ def scenario_7():  # Scenario number: 7
     for i in range(1, width):
         target_locations.append((i, length - 1))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
 
 '''
@@ -157,7 +166,9 @@ def task_2():  # Scenario number: 2
     obstacle_locations = []
     is_dijkstra = False
     is_exit = False
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
+    speed = [[1, 20]]
+    scale_var = 1
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
 
 def task_3():  # Scenario number: 3
@@ -168,10 +179,12 @@ def task_3():  # Scenario number: 3
     obstacle_locations = []
     is_dijkstra = False
     is_exit = False
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
+    speed = [[1, 20]]
+    scale_var = 1
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
 
-def task_4_bottleneck():  # Scenario number: 41
+def task_4_bottleneck():  # Scenario number: 41, as second argument: 0 for disabling Dijkstra, 1 for enabling
     room_side = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)  # 50 blocks = 10m
     corridor_length = int(500 / PEDESTRIAN_SIZE_SCENARIO_4)  # 25 blocks
     corridor_width = int(
@@ -186,6 +199,8 @@ def task_4_bottleneck():  # Scenario number: 41
     obstacle_locations = []
     is_dijkstra = False
     is_exit = True
+    speed = [[1, 20]]
+    scale_var = 1
 
     # Place 150 pedestrians with uniform distribution
     loc_x = np.random.randint(low=0, high=room_side, size=number_of_pedestrians)
@@ -227,22 +242,25 @@ def task_4_bottleneck():  # Scenario number: 41
     for i in range(corridor_width + 1):
         target_locations.append((near_corridor + i, grid_length))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
-def task_4_chicken_test():  # Scenario number: 42
+def task_4_chicken_test():  # Scenario number: 42, as second argument: 0 for disabling Dijkstra, 1 for enabling
     grid_size = (50, 50)
     pedestrian_locations = [(24, 0), (20, 0), (28, 0)]
     target_locations = [(24, 49)]
     obstacle_locations = []
     is_dijkstra = False
     is_exit = True
+    speed = [[1, 20]]
+    scale_var = 1
+
     for i in range(15, 35):
         obstacle_locations.append((i, 35))
     for j in range(15, 35):
         obstacle_locations.append((15, j))
         obstacle_locations.append((34, j))
 
-    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
 
 def create_grid():
@@ -268,22 +286,22 @@ def create_grid():
 
 
     if scenario == 1:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = scenario_1()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = scenario_1()
     elif scenario == 4:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = scenario_4(line_movement, density)
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = scenario_4(line_movement, density)
     elif scenario == 6:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = scenario_6()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = scenario_6()
     elif scenario == 7:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = scenario_7()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = scenario_7()
     elif scenario == 2:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = task_2()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = task_2()
     elif scenario == 3:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = task_3()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = task_3()
     elif scenario == 41:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = task_4_bottleneck()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = task_4_bottleneck()
         is_dijkstra = is_dijkstra_4
     elif scenario == 42:
-        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit = task_4_chicken_test()
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = task_4_chicken_test()
         is_dijkstra = is_dijkstra_4
     else:
         return 0
@@ -298,4 +316,6 @@ def create_grid():
     for loc in obstacle_locations:
         grid[loc] = S_OBSTACLE
 
-    return grid, is_dijkstra, is_exit
+    print("SPEED: ", speed)
+
+    return grid, is_dijkstra, is_exit, speed, scale_var
