@@ -28,11 +28,11 @@ def scenario_1():  # Scenario number: 1, no additional argument
 def scenario_4(line_movement, density):  # Scenario number: 4, second argument: line movement = 0 or 1, third argument: density value
     # Corridor with 1000m long, 10m wide
     width = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks 50
-    length = int(100000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks, 5000
+    length = int(10000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks, 5000
     obstacle_locations = []
     target_locations = []
     pedestrian_locations = []
-    number_of_pedestrians = int(10 * 1000 * density)  # 10 x 1000 corridor
+    number_of_pedestrians = int(10 * 100 * density)  # 10 x 1000 corridor
     # as number of blocks, 2000 block is 400 meters, all pedestrians will be distributed before the first measuring point
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_4 * 100) / PEDESTRIAN_SIZE_SCENARIO_4)
     is_dijkstra = True
@@ -42,7 +42,7 @@ def scenario_4(line_movement, density):  # Scenario number: 4, second argument: 
 
     if line_movement:
         width = 1
-        number_of_pedestrians = int(0.2 * 1000 * density)  # Calculated from new area
+        number_of_pedestrians = int(0.2 * 100 * density)  # Calculated from new area
 
     grid_size = (width, length)
 
