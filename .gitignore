@@ -139,6 +139,7 @@ cython_debug/
 
 ##
 .idea
+.DS_Store
 ## If you want to keep this files, please move them into the /tests folder with a well defined name
 /path_pedestrians.txt
 /velocity_pedestrians.txt
