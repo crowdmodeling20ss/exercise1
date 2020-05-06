@@ -27,17 +27,19 @@ def scenario_1():  # Scenario number: 1
 
 def scenario_4(line_movement, density):  # Scenario number: 4
     # Corridor with 1000m long, 10m wide
-    width = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks 50
-    length = int(100000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks, 5000
+    length_in_m = 70
+    wide_in_m = 6
+    width = int(wide_in_m*100 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks 50
+    length = int(length_in_m*100 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks, 600
     obstacle_locations = []
     target_locations = []
     pedestrian_locations = []
-    number_of_pedestrians = int(10 * 1000 * density)
+    number_of_pedestrians = int(wide_in_m * length_in_m * density)
     # as number of blocks, 2000 block is 400 meters, all pedestrians will be distributed before the first measuring point
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_4 * 100) / PEDESTRIAN_SIZE_SCENARIO_4)
     is_dijkstra = True
     is_exit = True
-    speed = [[13, 20]]
+    speed = [[7, 20]]
     scale_var = 1 #4
 
     if line_movement == "true":

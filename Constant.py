@@ -18,7 +18,7 @@ PEDESTRIAN_SIZE_SCENARIO_4 = 20  # With 40 cm, 6 pedestrians cannot fit in 1 sqm
 SCENARIO_4_LINES = 10  # Number of lines for line movement
 SCENARIO_7_WIDTH = 20  # M
 SCENARIO_7_LENGTH = 200  # M
-MINIMUM_BORDER_LENGTH_SCENARIO_4 = 400  # M
+MINIMUM_BORDER_LENGTH_SCENARIO_4 = 50  # M
 MINIMUM_BORDER_LENGTH_SCENARIO_7 = 10  # M
 
 # TODO: We can increase number of direction later

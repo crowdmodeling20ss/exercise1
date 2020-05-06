@@ -30,9 +30,11 @@ class Simulation(ABC):
         time_tick = []
         path_pedestrians = {}
         velocity_pedestrians = {}
+        position_history = {}
         for p in ca_model.pedestrians:
             path_pedestrians[p.p_id] = []
             velocity_pedestrians[p.p_id] = []
+            position_history[p.p_id] = []
 
         time_counter = 0
         plt.show()
@@ -60,17 +62,21 @@ class Simulation(ABC):
 
                     path_pedestrians[p.p_id].append(total_distance)
                     velocity_pedestrians[p.p_id].append(distance)
+                    position_history[p.p_id] += [[time_counter, i] for i in p.path_cost_history[len(position_history[p.p_id]):]] # not tested
 
                 time_tick.append(time_counter)
 
-        if velocity_graph_enabled: self.show_path_time_plot(path_pedestrians, velocity_pedestrians, time_tick, True)
+        if velocity_graph_enabled: self.show_path_time_plot(path_pedestrians, velocity_pedestrians, position_history, time_tick, True)
 
-    def saveToFile(self, path_pedestrians, velocity_pedestrians, time_tick):
+    def saveToFile(self, path_pedestrians, velocity_pedestrians, position_history, time_tick):
         f = open("path_pedestrians.txt", "w")
         f.write(str([path_pedestrians[g] for g in path_pedestrians]))
         f.close()
         f = open("velocity_pedestrians.txt", "w")
         f.write(str([velocity_pedestrians[g] for g in velocity_pedestrians]))
+        f.close()
+        f = open("position_history.txt", "w")
+        f.write(str([position_history[g] for g in position_history]))
         f.close()
         f = open("time_tick.txt", "w")
         f.write(str(time_tick))
@@ -85,7 +91,7 @@ class Simulation(ABC):
         plt.imshow(cost_map, cmap='Blues', interpolation='nearest')
         plt.pause(duration)
 
-    def show_path_time_plot(self, path_pedestrians, velocity_pedestrians, time_tick, is_saved):
+    def show_path_time_plot(self, path_pedestrians, velocity_pedestrians, position_history, time_tick, is_saved):
         t = len(time_tick)
         for i in range(len(path_pedestrians)):
             if (len(path_pedestrians[i]) < t):
@@ -98,7 +104,7 @@ class Simulation(ABC):
                     velocity_pedestrians[i] += [0]
 
         if is_saved:
-            self.saveToFile(path_pedestrians, velocity_pedestrians, time_tick)
+            self.saveToFile(path_pedestrians, velocity_pedestrians, position_history, time_tick)
 
         plt.show()
         plt.cla()
