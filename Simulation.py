@@ -9,7 +9,7 @@ from matplotlib import colors
 
 class Simulation(ABC):
     def __init__(self, IS_DIJKSTRA_ENABLED=True, IS_PEDESTRIAN_EXIT=True, SPEED_OF_PEDESTRIANS=None,
-                 SPEED_PER_PEDESTRIAN_IS_ON=False, SHOW_COST_MAP=True, SHOW_SPEED_GRAPH=False):
+                 SPEED_PER_PEDESTRIAN_IS_ON=False, SHOW_COST_MAP=True, SHOW_SPEED_GRAPH=False, OBSTACLE_AVOIDANCE=True):
         self._is_running = False
         self.IS_DIJKSTRA_ENABLED = IS_DIJKSTRA_ENABLED
         self.IS_PEDESTRIAN_EXIT = IS_PEDESTRIAN_EXIT
@@ -17,6 +17,7 @@ class Simulation(ABC):
         self.SPEED_PER_PEDESTRIAN_IS_ON = SPEED_PER_PEDESTRIAN_IS_ON
         self.SHOW_COST_MAP = SHOW_COST_MAP
         self.SHOW_SPEED_GRAPH = SHOW_SPEED_GRAPH
+        self.OBSTACLE_AVOIDANCE = OBSTACLE_AVOIDANCE
 
     def run(self):
         print("Simulation(ABC).run(self)")

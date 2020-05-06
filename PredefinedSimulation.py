@@ -23,7 +23,7 @@ class PredefinedSimulation(Simulation):
 
         CONFIGURABLE_the_grid = GridCreator(CONFIGURABLE_grid, scale_var)
         CONFIGURABLE_map_obj = Map(CONFIGURABLE_the_grid.grid.shape[0], CONFIGURABLE_the_grid.grid.shape[1],
-                                   CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners, self.IS_DIJKSTRA_ENABLED)
+                                   CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners, self.IS_DIJKSTRA_ENABLED, self.OBSTACLE_AVOIDANCE)
 
         if self.SHOW_COST_MAP:
             self.show_cost_map(CONFIGURABLE_map_obj.cost_map, 5)
