@@ -6,7 +6,7 @@ from Constant import *
     RiMEA scenarios
 '''
 
-def scenario_1():  # Scenario number: 1
+def scenario_1():  # Scenario number: 1, no additional argument
     # Corridor with 2m wide and 40m long
     width = int(200 / PEDESTRIAN_SIZE)  # as number of blocks, 5x40cm = 2m
     length = int(4000 / PEDESTRIAN_SIZE)  # as number of blocks, 100x40cm = 40m = 100
@@ -25,35 +25,33 @@ def scenario_1():  # Scenario number: 1
     return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
 
-def scenario_4(line_movement, density):  # Scenario number: 4
+def scenario_4(line_movement, density):  # Scenario number: 4, second argument: line movement = 0 or 1, third argument: density value
     # Corridor with 1000m long, 10m wide
-    length_in_m = 70
-    wide_in_m = 6
-    width = int(wide_in_m*100 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks 50
-    length = int(length_in_m*100 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks, 600
+    width = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks 50
+    length = int(100000 / PEDESTRIAN_SIZE_SCENARIO_4)  # as number of blocks, 5000
     obstacle_locations = []
     target_locations = []
     pedestrian_locations = []
-    number_of_pedestrians = int(wide_in_m * length_in_m * density)
+    number_of_pedestrians = int(10 * 1000 * density)  # 10 x 1000 corridor
     # as number of blocks, 2000 block is 400 meters, all pedestrians will be distributed before the first measuring point
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_4 * 100) / PEDESTRIAN_SIZE_SCENARIO_4)
     is_dijkstra = True
     is_exit = True
-    speed = [[7, 20]]
+    speed = [[1, 20]]
     scale_var = 1 #4
 
-    if line_movement == "true":
-        width = SCENARIO_4_LINES
+    if line_movement:
+        width = 1
+        number_of_pedestrians = int(0.2 * 1000 * density)  # Calculated from new area
 
     grid_size = (width, length)
 
     # Place pedestrians according to density, with uniform distribution
     if line_movement:  # Here, pedestrians are placed one after the other in lines
-        border = int(number_of_pedestrians / SCENARIO_4_LINES)
+        border = int(number_of_pedestrians / width)
         for j in range(border):
-            for i in range(width):
-                loc = (i, j)
-                pedestrian_locations.append(loc)
+            loc = (0, j)
+            pedestrian_locations.append(loc)
     else:
         loc_x = np.random.randint(low=0, high=width, size=number_of_pedestrians)
         loc_y = np.random.randint(low=0, high=minimum_border_length, size=number_of_pedestrians)
@@ -70,7 +68,7 @@ def scenario_4(line_movement, density):  # Scenario number: 4
             pedestrian_locations.append(loc)
 
     # Place targets
-    for i in range(0, width):
+    for i in range(width):
         target_locations.append((i, length - 1))
 
     return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
@@ -185,6 +183,17 @@ def task_3():  # Scenario number: 3
     scale_var = 1
     return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
+def task_3_equal_block_distance():  # Scenario number: 31
+    grid_size = (50, 50)
+    pedestrian_locations = [(24, 4), (24, 44), (4, 24), (34, 34),
+                            (34, 14)]  # Creating pedestrians in equal number of block distance
+    target_locations = [(24, 24)]
+    obstacle_locations = []
+    is_dijkstra = False
+    is_exit = False
+    speed = [[1, 20]]
+    scale_var = 1
+    return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
 
 def task_4_bottleneck():  # Scenario number: 41, as second argument: 0 for disabling Dijkstra, 1 for enabling
     room_side = int(1000 / PEDESTRIAN_SIZE_SCENARIO_4)  # 50 blocks = 10m
@@ -299,6 +308,8 @@ def create_grid():
         grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = task_2()
     elif scenario == 3:
         grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = task_3()
+    elif scenario == 31:
+        grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = task_3_equal_block_distance()
     elif scenario == 41:
         grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var = task_4_bottleneck()
         is_dijkstra = is_dijkstra_4
@@ -318,6 +329,5 @@ def create_grid():
     for loc in obstacle_locations:
         grid[loc] = S_OBSTACLE
 
-    print("SPEED: ", speed)
 
     return grid, is_dijkstra, is_exit, speed, scale_var

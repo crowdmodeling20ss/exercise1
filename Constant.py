@@ -15,7 +15,6 @@ S_SPEED = 0
 S_AVOIDANCE = 0
 PEDESTRIAN_SIZE = 40  # Cm
 PEDESTRIAN_SIZE_SCENARIO_4 = 20  # With 40 cm, 6 pedestrians cannot fit in 1 sqm area
-SCENARIO_4_LINES = 10  # Number of lines for line movement
 SCENARIO_7_WIDTH = 20  # M
 SCENARIO_7_LENGTH = 200  # M
 MINIMUM_BORDER_LENGTH_SCENARIO_4 = 50  # M
