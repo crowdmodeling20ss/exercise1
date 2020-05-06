@@ -40,12 +40,12 @@ class Simulation(ABC):
         time_counter = 0
         plt.show()
         while self._is_running and simulation_boolean == True:
-            #plt.cla()
-            #plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
-            #plt.pause(5)
+        #plt.cla()
+            plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
+            plt.pause(0.1)
             start = time.time()
             ca_model.tick()
-            #plt.cla()
+            plt.cla()
             done = time.time()
             elapsed = done - start
             print(elapsed)
@@ -67,21 +67,7 @@ class Simulation(ABC):
 
                 time_tick.append(time_counter)
 
-        if velocity_graph_enabled: self.show_path_time_plot(path_pedestrians, velocity_pedestrians, position_history, time_tick, True)
-
-    def saveToFile(self, path_pedestrians, velocity_pedestrians, position_history, time_tick):
-        f = open("path_pedestrians.txt", "w")
-        f.write(str([path_pedestrians[g] for g in path_pedestrians]))
-        f.close()
-        f = open("velocity_pedestrians.txt", "w")
-        f.write(str([velocity_pedestrians[g] for g in velocity_pedestrians]))
-        f.close()
-        f = open("position_history.txt", "w")
-        f.write(str([position_history[g] for g in position_history]))
-        f.close()
-        f = open("time_tick.txt", "w")
-        f.write(str(time_tick))
-        f.close()
+        if velocity_graph_enabled: show_path_time_plot(path_pedestrians, velocity_pedestrians, position_history, time_tick, True)
 
     def show_cost_map(self, cost_map, duration):
         print('Calculated cost Map')
@@ -92,39 +78,53 @@ class Simulation(ABC):
         plt.imshow(cost_map, cmap='Blues', interpolation='nearest')
         plt.pause(duration)
 
-    def show_path_time_plot(self, path_pedestrians, velocity_pedestrians, position_history, time_tick, is_saved):
-        t = len(time_tick)
-        for i in range(len(path_pedestrians)):
-            if (len(path_pedestrians[i]) < t):
-                for _ in range(t - len(path_pedestrians[i])):
-                    try:
-                        path_pedestrians[i] += [path_pedestrians[i][len(path_pedestrians[i]) - 1]]
-                    except:
-                        path_pedestrians[i] += [0]
-                for _ in range(t - len(velocity_pedestrians[i])):
-                    velocity_pedestrians[i] += [0]
+def show_path_time_plot(path_pedestrians, velocity_pedestrians, position_history, time_tick, is_saved):
+    t = len(time_tick)
+    for i in range(len(path_pedestrians)):
+        if (len(path_pedestrians[i]) < t):
+            for _ in range(t - len(path_pedestrians[i])):
+                try:
+                    path_pedestrians[i] += [path_pedestrians[i][len(path_pedestrians[i]) - 1]]
+                except:
+                    path_pedestrians[i] += [0]
+            for _ in range(t - len(velocity_pedestrians[i])):
+                velocity_pedestrians[i] += [0]
 
-        if is_saved:
-            self.saveToFile(path_pedestrians, velocity_pedestrians, position_history, time_tick)
+    if is_saved:
+        saveToFile(path_pedestrians, velocity_pedestrians, position_history, time_tick)
 
-        plt.show()
-        plt.cla()
-        for i in range(len(path_pedestrians)):
-            plt.plot(time_tick, path_pedestrians[i], label="P#" + str(i))
-        plt.xlabel('Time')
-        plt.ylabel('Path')
-        plt.title('Path/Time Pedestrian')
-        plt.legend()
-        plt.show()
-        plt.pause(1)
+    plt.show()
+    plt.cla()
+    for i in range(len(path_pedestrians)):
+        plt.plot(time_tick, path_pedestrians[i], label="P#" + str(i))
+    plt.xlabel('Time')
+    plt.ylabel('Path')
+    plt.title('Path/Time Pedestrian')
+    plt.legend()
+    plt.show()
+    plt.pause(1)
 
-        plt.show()
-        plt.cla()
-        for i in range(len(path_pedestrians)):
-            plt.plot(time_tick, velocity_pedestrians[i], label="V#"+str(i))
-        plt.xlabel('Time')
-        plt.ylabel('Speed')
-        plt.title('Speed/Time Pedestrian')
-        plt.legend()
-        plt.show()
-        plt.pause(1)
+    plt.show()
+    plt.cla()
+    for i in range(len(path_pedestrians)):
+        plt.plot(time_tick, velocity_pedestrians[i], label="V#"+str(i))
+    plt.xlabel('Time')
+    plt.ylabel('Speed')
+    plt.title('Speed/Time Pedestrian')
+    plt.legend()
+    plt.show()
+    plt.pause(1)
+
+def saveToFile(path_pedestrians, velocity_pedestrians, position_history, time_tick):
+    f = open("path_pedestrians.txt", "w")
+    f.write(str([path_pedestrians[g] for g in path_pedestrians]))
+    f.close()
+    f = open("velocity_pedestrians.txt", "w")
+    f.write(str([velocity_pedestrians[g] for g in velocity_pedestrians]))
+    f.close()
+    f = open("position_history.txt", "w")
+    f.write(str([position_history[g] for g in position_history]))
+    f.close()
+    f = open("time_tick.txt", "w")
+    f.write(str(time_tick))
+    f.close()
