@@ -140,6 +140,6 @@ cython_debug/
 ##
 .idea
 ## If you want to keep this files, please move them into the /tests folder with a well defined name
-path_pedestrians.txt
+tests/scenario-4/test-1/path_pedestrians.txt
 velocity_pedestrians.txt
-time_tick.txt
+tests/scenario-4/test-1/time_tick.txt
