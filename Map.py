@@ -17,13 +17,14 @@ class Map:
     :param data MXN numpy array
     """
 
-    def __init__(self, width, height, data, corners, is_dijkstra_enabled=True):
+    def __init__(self, width, height, data, corners, is_dijkstra_enabled=True, is_obstacle_avoidance=True):
         self.id = 0
         self.width = width
         self.height = height
         self.data = data
         self.corners = corners
         self.is_dijkstra_enabled = is_dijkstra_enabled
+        self.is_obstacle_avoidance = is_obstacle_avoidance
         self.cost_map = self.calculate_cost_map()
 
     def set_state(self, position, state):
@@ -64,7 +65,7 @@ class Map:
                     direction_cost = -1
                     return direction_cost
                     ##EXIT FUNCTION, found the target
-                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                elif (self.is_obstacle_avoidance and curr_point == S_OBSTACLE) or curr_point == S_PEDESTRIAN:
                     direction_cost = -2  # invalid neighbour
                     return direction_cost
                     # Check if break works:
@@ -84,7 +85,7 @@ class Map:
                     direction_cost = -1
                     return direction_cost
                     ##EXIT FUNCTION, found the target
-                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                elif (self.is_obstacle_avoidance and curr_point == S_OBSTACLE) or curr_point == S_PEDESTRIAN:
                     direction_cost = -2  # invalid neighbour
                     return direction_cost
 
@@ -104,7 +105,7 @@ class Map:
                     direction_cost = -1
                     return direction_cost
                     ##EXIT FUNCTION, found the target
-                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                elif (self.is_obstacle_avoidance and curr_point) == S_OBSTACLE or curr_point == S_PEDESTRIAN:
                     direction_cost = -2  # invalid neighbour
                     # Check if break works:
                     return direction_cost
@@ -124,7 +125,7 @@ class Map:
                     direction_cost = -1
                     return direction_cost
                     ##EXIT FUNCTION, found the target
-                elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                elif (self.is_obstacle_avoidance and curr_point) == S_OBSTACLE or curr_point == S_PEDESTRIAN:
                     direction_cost = -2  # invalid neighbour
                     # Check if break works:
                     return direction_cost
@@ -180,7 +181,7 @@ class Map:
                         direction_cost = -1
                         return direction_cost
                         ##EXIT FUNCTION, found the target
-                    elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    elif (self.is_obstacle_avoidance and curr_point == S_OBSTACLE) or curr_point == S_PEDESTRIAN:
                         direction_cost = -2  # invalid neighbour
                         return direction_cost
                         # Check if break works:
@@ -199,7 +200,7 @@ class Map:
                         direction_cost = -1
                         return direction_cost
                         ##EXIT FUNCTION, found the target
-                    elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    elif (self.is_obstacle_avoidance and curr_point == S_OBSTACLE) or curr_point == S_PEDESTRIAN:
                         direction_cost = -2  # invalid neighbour
                         return direction_cost
 
@@ -218,7 +219,7 @@ class Map:
                         direction_cost = -1
                         return direction_cost
                         ##EXIT FUNCTION, found the target
-                    elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    elif (self.is_obstacle_avoidance and curr_point == S_OBSTACLE) or curr_point == S_PEDESTRIAN:
                         direction_cost = -2  # invalid neighbour
                         # Check if break works:
                         return direction_cost
@@ -237,7 +238,7 @@ class Map:
                         direction_cost = -1
                         return direction_cost
                         ##EXIT FUNCTION, found the target
-                    elif curr_point == S_OBSTACLE or curr_point == S_PEDESTRIAN:
+                    elif (self.is_obstacle_avoidance and curr_point == S_OBSTACLE) or curr_point == S_PEDESTRIAN:
                         direction_cost = -2  # invalid neighbour
                         # Check if break works:
                         return direction_cost

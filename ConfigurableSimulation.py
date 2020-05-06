@@ -9,9 +9,10 @@ class ConfigurableSimulation(Simulation):
     def run(self):
         self._is_running = True
 
-        CONFIGURABLE_grid, is_dijkstra_enabled, speed, num_pedestrian = create_grid_new_scenario()
+        CONFIGURABLE_grid, is_dijkstra_enabled, obstacle_avoidance, speed, num_pedestrian = create_grid_new_scenario()
         self.IS_DIJKSTRA_ENABLED = is_dijkstra_enabled
         self.SHOW_COST_MAP = is_dijkstra_enabled
+        self.OBSTACLE_AVOIDANCE = obstacle_avoidance
         num_speed = len(speed)
         # Num speed is to assign speeds in the new_scenario.txt to that number of pedestrians, rest will be filled with default speed 1
         if num_speed > 1:
@@ -25,7 +26,7 @@ class ConfigurableSimulation(Simulation):
 
         CONFIGURABLE_the_grid = GridCreator(CONFIGURABLE_grid, 1)  # No scale variable for new scenarios
         CONFIGURABLE_map_obj = Map(CONFIGURABLE_the_grid.grid.shape[0], CONFIGURABLE_the_grid.grid.shape[1],
-                                   CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners, self.IS_DIJKSTRA_ENABLED)
+                                   CONFIGURABLE_the_grid.grid, CONFIGURABLE_the_grid.corners, self.IS_DIJKSTRA_ENABLED, self.OBSTACLE_AVOIDANCE)
 
         if self.SHOW_COST_MAP:
             self.show_cost_map(CONFIGURABLE_map_obj.cost_map, 5)

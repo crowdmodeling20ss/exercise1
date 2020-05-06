@@ -143,3 +143,4 @@ cython_debug/
 path_pedestrians.txt
 velocity_pedestrians.txt
 time_tick.txt
+position_history.txt
