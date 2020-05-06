@@ -185,8 +185,8 @@ def task_3():  # Scenario number: 3
 
 def task_3_equal_block_distance():  # Scenario number: 31
     grid_size = (50, 50)
-    pedestrian_locations = [(24, 4), (24, 44), (4, 24), (34, 35),
-                            (34, 13)]  # Creating pedestrians in equal number of block distance
+    pedestrian_locations = [(24, 4), (24, 44), (4, 24), (34, 34),
+                            (34, 14)]  # Creating pedestrians in equal number of block distance
     target_locations = [(24, 24)]
     obstacle_locations = []
     is_dijkstra = False
