@@ -1,6 +1,7 @@
 Line movement is test:
 <img src="scenario-4-test-1-line-movement.png" />
 
+```
 with following settings:
 MINIMUM_BORDER_LENGTH_SCENARIO_4 = 50
 wide_in_m = 6
@@ -17,3 +18,4 @@ is_dijkstra = True
 is_exit = True
 speed = [[7, 20]]
 scale_var = 1 #4
+```
