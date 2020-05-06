@@ -32,7 +32,8 @@ class Simulation(ABC):
         path_pedestrians = {}
         velocity_pedestrians = {}
         position_history = {}
-        for p in ca_model.pedestrians:
+        for i in ca_model.pedestrians:
+            p = ca_model.pedestrians[i]
             path_pedestrians[p.p_id] = []
             velocity_pedestrians[p.p_id] = []
             position_history[p.p_id] = []
@@ -53,7 +54,8 @@ class Simulation(ABC):
 
             if velocity_graph_enabled:
                 time_counter += 1
-                for p in ca_model.pedestrians:
+                for i in ca_model.pedestrians:
+                    p = ca_model.pedestrians[i]
                     last_distance = 0 if len(path_pedestrians[p.p_id]) == 0 else path_pedestrians[p.p_id][
                         time_counter - 2]
                     last_position = np.array(p.visited_path[len(p.visited_path) - 2])

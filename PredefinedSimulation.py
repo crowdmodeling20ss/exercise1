@@ -11,7 +11,7 @@ class PredefinedSimulation(Simulation):
         self._is_running = True
         CONFIGURABLE_grid, is_dijkstra_enabled, is_pedestrian_exit, speed, scale_var = create_grid()
         self.IS_DIJKSTRA_ENABLED = is_dijkstra_enabled
-        self.SHOW_COST_MAP = is_dijkstra_enabled
+        self.SHOW_COST_MAP = False
         self.IS_PEDESTRIAN_EXIT = is_pedestrian_exit
 
         if len(speed) > 1:
@@ -30,5 +30,5 @@ class PredefinedSimulation(Simulation):
 
         CONFIGURABLE_model = CellularModel(CONFIGURABLE_map_obj, self.IS_PEDESTRIAN_EXIT, self.SPEED_OF_PEDESTRIANS,
                                            self.SPEED_PER_PEDESTRIAN_IS_ON)
-        self.runSimulation(CONFIGURABLE_model, self.SHOW_SPEED_GRAPH)
+        self.runSimulation(CONFIGURABLE_model, False)
         # """

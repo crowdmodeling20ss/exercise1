@@ -17,7 +17,7 @@ class CellularModel:
     """
 
     def __init__(self, grid_map, is_pedestrian_exit=True, speeds=None, speed_per_pedestrian=False):
-        self.pedestrians = []
+        self.pedestrians = {}
         print("speed per pedestrian", speed_per_pedestrian)
         self.speeds = speeds if speed_per_pedestrian else [speeds]
         self.speed_per_pedestrian = speed_per_pedestrian
@@ -30,15 +30,17 @@ class CellularModel:
     # Assume 1 iteration is 1 second
     # if we want to change time, we can change number of iteration. i.e. 1 iteration is 10 second
     def tick(self):
-        self.pedestrian_positions = np.zeros((self.grid_map.width*self.grid_map.height, 2))
+        self.pedestrian_positions = np.zeros(self.grid_map.width*self.grid_map.height)
         w = self.grid_map.height
         h = self.grid_map.width
-        for p in self.pedestrians:
+        for i in self.pedestrians:
+            p = self.pedestrians[i]
             x = min(max(0, int(p.position[0])), h)
             y = min(max(0, int(p.position[1])), w)
-            self.pedestrian_positions[x * w + y] = p.position
+            self.pedestrian_positions[x * w + y] = p.p_id
 
-        for p in self.pedestrians:
+        for i in list(self.pedestrians):
+            p = self.pedestrians[i]
             p.tick_multicell()
 
     # make private
@@ -52,8 +54,8 @@ class CellularModel:
             r_max = self.get_size() * 1.5
             # print("R_max:", r_max)
             center = Util.calculate_center(corners)
-            self.pedestrians.append(Pedestrian(p_id, self, self.grid_map, center, self.get_pedestrian_speed(p_id),
-                                               self.grid_map.corners[p_id], r_max, self.is_pedestrian_exit, self.grid_map.is_dijkstra_enabled))
+            self.pedestrians[p_id] = Pedestrian(p_id, self, self.grid_map, center, self.get_pedestrian_speed(p_id),
+                                               self.grid_map.corners[p_id], r_max, self.is_pedestrian_exit, self.grid_map.is_dijkstra_enabled)
 
     def get_size(self):
         # print("Corners:", self.corners)
@@ -62,7 +64,7 @@ class CellularModel:
 
     def remove_pedestrian(self, pedestrian):
         self.grid_map.set_state_block(pedestrian.corners, pedestrian.size, S_EMPTY)
-        self.pedestrians.remove(pedestrian)
+        del self.pedestrians[pedestrian.p_id]
 
     def end_simulation(self):
         if len(self.pedestrians) == 0:
