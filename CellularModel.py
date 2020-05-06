@@ -24,11 +24,20 @@ class CellularModel:
         self.is_pedestrian_exit = is_pedestrian_exit
         self.grid_map = grid_map
         self.import_pedestrians_from_map()
+        self.pedestrian_positions = np.zeros(grid_map.width*grid_map.height) # 2D array to 1D
 
     # Move all pedestrians one iteration
     # Assume 1 iteration is 1 second
     # if we want to change time, we can change number of iteration. i.e. 1 iteration is 10 second
     def tick(self):
+        self.pedestrian_positions = np.zeros((self.grid_map.width*self.grid_map.height, 2))
+        w = self.grid_map.height
+        h = self.grid_map.width
+        for p in self.pedestrians:
+            x = min(max(0, int(p.position[0])), h)
+            y = min(max(0, int(p.position[1])), w)
+            self.pedestrian_positions[x * w + y] = p.position
+
         for p in self.pedestrians:
             p.tick_multicell()
 

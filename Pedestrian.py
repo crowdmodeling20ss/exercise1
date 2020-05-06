@@ -124,6 +124,29 @@ class Pedestrian:
                 self.forward_multicell(best)
 
     def calculate_interaction_cost_multicell(self, neighbour_costs):
+        p = self.position
+        w = self.grid_map.height
+        h = self.grid_map.width
+        x1 = max(0, int(p[0] - 3))
+        y1 = max(0, int(p[1] - 3))
+        x2 = min(h, int(p[0] + 3))
+        y2 = min(w, int(p[1] + 3))
+        pw = y2 - y1
+        a = x1
+        check_postions = []
+        for x in range(x1, min(x2 + 1, w)):
+            tx = min(max(0, int(max(x - 1, 0) * w + y1)), h)
+
+            #indexes = np.where(self.ca_model.pedestrian_positions[tx:min(max(0, int(tx + pw)), h)] != 0)
+            #ped_pos = np.take(self.ca_model.pedestrian_positions, indexes).flatten()
+            #check_postions += ped_pos
+
+            for i in self.ca_model.pedestrian_positions[tx:min(max(0, int(tx + pw)), h)]:
+                if i[0] != 0 and i[1] != 0:
+                    check_postions.append(i)
+
+        print("id:"+str(self.p_id) + " locatoin"+ str(self.position) + " " + str(check_postions))
+
         best = -1
         cost = math.inf
         normalization_var = np.amax(neighbour_costs) / 2 * 3
@@ -134,9 +157,9 @@ class Pedestrian:
                 # print("Direction:", i)
                 # print("Cost before adding interaction_cost", neighbour_costs[i])
                 # print("The Cost", self.interaction_cost_multicell(i))
-                interaction_cost = self.interaction_cost_multicell(i)  # * normalization_var
-                neighbour_costs[i] += interaction_cost
-                interaction_cost_tmp.append(interaction_cost)  # DEBUG PURPOSE
+                #interaction_cost = self.interaction_cost_multicell(i)  # * normalization_var
+                #neighbour_costs[i] += interaction_cost
+                #interaction_cost_tmp.append(interaction_cost)  # DEBUG PURPOSE
                 # print("Cost after adding interaction_cost", neighbour_costs[i])
 
                 if cost > neighbour_costs[i]:
