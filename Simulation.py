@@ -40,12 +40,12 @@ class Simulation(ABC):
         time_counter = 0
         plt.show()
         while self._is_running and simulation_boolean == True:
-            #plt.cla()
-            #plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
-            #plt.pause(5)
+            plt.cla()
+            plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
+            plt.pause(0.1)
             start = time.time()
             ca_model.tick()
-            #plt.cla()
+            plt.cla()
             done = time.time()
             elapsed = done - start
             print(elapsed)
