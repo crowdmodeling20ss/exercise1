@@ -39,7 +39,7 @@ class Simulation(ABC):
         while self._is_running and simulation_boolean == True:
             plt.cla()
             plt.imshow(ca_model.grid_map.data, interpolation='nearest', origin='upper', cmap=cmap, norm=norm)
-            plt.pause(2)
+            plt.pause(5)
             start = time.time()
             ca_model.tick()
             plt.cla()

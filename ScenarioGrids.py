@@ -32,26 +32,26 @@ def scenario_4(line_movement, density):  # Scenario number: 4, second argument: 
     obstacle_locations = []
     target_locations = []
     pedestrian_locations = []
-    number_of_pedestrians = int(10 * 1000 * density)
+    number_of_pedestrians = int(10 * 1000 * density)  # 10 x 1000 corridor
     # as number of blocks, 2000 block is 400 meters, all pedestrians will be distributed before the first measuring point
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_4 * 100) / PEDESTRIAN_SIZE_SCENARIO_4)
     is_dijkstra = True
     is_exit = True
-    speed = [[13, 20]]
+    speed = [[1, 20]]
     scale_var = 1 #4
 
-    if line_movement == "true":
-        width = SCENARIO_4_LINES
+    if line_movement:
+        width = 1
+        number_of_pedestrians = int(0.2 * 1000 * density)  # Calculated from new area
 
     grid_size = (width, length)
 
     # Place pedestrians according to density, with uniform distribution
     if line_movement:  # Here, pedestrians are placed one after the other in lines
-        border = int(number_of_pedestrians / SCENARIO_4_LINES)
+        border = int(number_of_pedestrians / width)
         for j in range(border):
-            for i in range(width):
-                loc = (i, j)
-                pedestrian_locations.append(loc)
+            loc = (0, j)
+            pedestrian_locations.append(loc)
     else:
         loc_x = np.random.randint(low=0, high=width, size=number_of_pedestrians)
         loc_y = np.random.randint(low=0, high=minimum_border_length, size=number_of_pedestrians)
@@ -68,7 +68,7 @@ def scenario_4(line_movement, density):  # Scenario number: 4, second argument: 
             pedestrian_locations.append(loc)
 
     # Place targets
-    for i in range(0, width):
+    for i in range(width):
         target_locations.append((i, length - 1))
 
     return grid_size, pedestrian_locations, target_locations, obstacle_locations, is_dijkstra, is_exit, speed, scale_var
