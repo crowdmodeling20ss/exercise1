@@ -37,7 +37,7 @@ def scenario_4(line_movement, density):  # Scenario number: 4, second argument: 
     minimum_border_length = int((MINIMUM_BORDER_LENGTH_SCENARIO_4 * 100) / PEDESTRIAN_SIZE_SCENARIO_4)
     is_dijkstra = True
     is_exit = True
-    speed = [[1, 20]]
+    speed = [[13, 20]]
     scale_var = 1 #4
 
     if line_movement:
