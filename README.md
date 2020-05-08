@@ -30,5 +30,18 @@ If you want to enable line movement, just change 0 to 1:
 ```
 ### ConfigurableSimulation.py
 In this type of simulation, settings of the simulation is provided completely by user. Look at the example scenario <a href="">here</a>. After settings are determined in `new_scenario.txt`, the simulation could be run via `python Main.py configurable` command.
+
+Example new_scenario.txt file:
+```
+Grid Size = (50,150)
+Pedestrian = [(10,0),(25,0),(40,0)]
+Target = [(0,149),(1,149),(2,149),(3,149),(4,149),(5,149),(6,149),(7,149),(8,149),(9,149),(10,149),(11,149),(12,149),(13,149),(14,149),(15,149),(16,149),(17,149),(18,149),(19,149),(20,149),(21,149),(22,149),(23,149),(24,149),(25,149),(26,149),(27,149),(28,149),(29,149),(30,149),(31,149),(32,149),(33,149),(34,149),(35,149),(36,149),(37,149),(38,149),(39,149),(40,149),(41,149),(42,149),(43,149),(44,149),(45,149),(46,149),(47,149),(48,149),(49,149)]
+Obstacle = []
+Dijkstra = true
+ObstacleAvoidance = true
+Speed = [[3,20],[5,20],[7,20]]
+```
+Example simulation for given scenario:
+<img src="new_scenario.gif" />
 ### UserInterfacedSimulation.py
 (not implemented yet)
