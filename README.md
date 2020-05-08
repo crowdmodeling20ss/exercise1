@@ -42,6 +42,7 @@ ObstacleAvoidance = true
 Speed = [[3,20],[5,20],[7,20]]
 ```
 Example simulation for given scenario:
+
 <img src="new_scenario.gif" />
 ### UserInterfacedSimulation.py
 (not implemented yet)
